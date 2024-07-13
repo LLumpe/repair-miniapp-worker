@@ -58,21 +58,22 @@
       </view>
       <view v-if="currentRepairOrder.state !== 1" class="box-order">
         <view class="box-order-title"> 维修记录：</view>
-        <view class="box-order-content"> </view>
+        <view class="box-order-content">
+          <RepairOrderWorkerInfo></RepairOrderWorkerInfo>
+        </view>
       </view>
 
       <view class="block" />
 
       <view class="box-option">
-        <view
-          v-if="
-            currentRepairOrder.state === 3 || currentRepairOrder.state === -10
-          "
-          class="box-option-item"
-        >
-          删除订单
+        <view v-if="currentRepairOrder.state === 1" class="box-option-item">
+          取消订单
         </view>
-        <view v-if="currentRepairOrder.state === 2" class="box-option-item">
+        <view
+          v-if="currentRepairOrder.state === 2"
+          class="box-option-item"
+          @click="handlePushUser"
+        >
           提醒用户
         </view>
         <view v-if="currentRepairOrder.state === -10" class="box-option-item">
@@ -128,6 +129,7 @@
 import { ref, Ref, reactive, defineComponent, onMounted } from "vue";
 import USteps from "@/components/USteps/index.vue";
 import RepairOrderDetailInfo from "./components/repairOrderDetailInfo/index.vue";
+import RepairOrderWorkerInfo from "./components/repairOrderWorkerInfo/index.vue";
 import UCollapse from "@/components/UCollapse/index.vue";
 import UCollapseItem from "@/components/UCollapseItem/index.vue";
 import UPopup from "@/components/UPopup/index.vue";
@@ -181,6 +183,7 @@ export default defineComponent({
     USteps,
     RepairOrderDetailInfo,
     UPopup,
+    RepairOrderWorkerInfo,
   },
   props: {
     repairOrder: {
@@ -200,6 +203,10 @@ export default defineComponent({
     //折叠面板折叠
     const handleCollapseChange = (value: any) => {
       console.log("value", value);
+    };
+    //提醒用户
+    const handlePushUser = () => {
+      showToast("提醒用户成功！", "success");
     };
     //上传维修图片
     const handleSubmitImage = () => {
@@ -254,6 +261,7 @@ export default defineComponent({
       showCollapse,
       handleSubmitImage,
       showMessage,
+      handlePushUser,
       timeout,
       handleCancelOrder,
       handleClearInterval,

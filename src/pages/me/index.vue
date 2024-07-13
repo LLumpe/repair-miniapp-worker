@@ -20,8 +20,8 @@ import VolunteerInformationBox from "@/components/VolunteerInformationBox/index.
 import { useStore } from "vuex";
 import authService from "@/service/authService";
 import { useTop } from "@/uses/useTop";
-// import store from "@/store";
-// import { ActionTypes } from "@/enums/actionTypes";
+import { ActionTypes } from "@/enums/actionTypes";
+import store from "@/store";
 
 export default defineComponent({
   components: { VolunteerInformationBox },
@@ -48,9 +48,14 @@ export default defineComponent({
 
     return { ...useTop(), logged, topStatus, myInfo };
   },
-  // onShow() {
-  //   store.dispatch(ActionTypes.getMyAllMissions);
-  // },
+  onShow() {
+    store.dispatch(ActionTypes.getRepairOrdersByWorker);
+    store.dispatch(ActionTypes.getWorkingRepairOrderByWorker);
+    store.dispatch(ActionTypes.getUnconfirmedRepairOrderByWorker);
+    store.dispatch(ActionTypes.getFinishedRepairOrderByWorker);
+    store.dispatch(ActionTypes.getBackRepairOrderByWorker);
+    // store.dispatch(ActionTypes.getMyAllMissions);
+  },
 });
 </script>
 

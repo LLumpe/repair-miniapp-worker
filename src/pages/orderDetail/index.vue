@@ -143,7 +143,7 @@
         <view class="box-option-item" @click="handleOpenPhoneModal"
           >联系用户</view
         >
-        <view class="box-option-item">确认接单</view>
+        <view class="box-option-item" @click="handleTakeOrder">确认接单</view>
       </view>
       <u-popup
         v-model="showPhone"
@@ -169,7 +169,7 @@
           </view>
         </view>
       </u-popup>
-      <u-popup
+      <!-- <u-popup
         v-model="showImage"
         custom-class="place-info-popup"
         mode="center"
@@ -197,6 +197,20 @@
             </swiper-item>
           </swiper>
         </view>
+      </u-popup> -->
+      <u-popup
+        v-model="showTake"
+        custom-class="place-info-popup"
+        mode="center"
+        :border-radius="20"
+      >
+        <view class="takeOrder">
+          <title class="takeOrder-title">确认接单吗？</title>
+          <view class="takeOrder-button">
+            <button @click="handleCanceltake">取消</button>
+            <button @click="handleTake">确认</button>
+          </view>
+        </view>
       </u-popup>
     </view>
   </view>
@@ -206,11 +220,13 @@
 import { Ref, computed, defineComponent, ref } from "vue";
 import USteps from "@/components/USteps/index.vue";
 import UPopup from "@/components/UPopup/index.vue";
+import { hideLoading, showLoading } from "@/utils/helper";
 const orderDetail: Ref<object | {}> = ref({});
 const equipmentList: Ref<any> = ref([]);
 const repairIndex: Ref<number> = ref(0);
 const pickIndex: Ref<number> = ref(0);
 const showImage: Ref<boolean> = ref(false);
+const showTake: Ref<boolean> = ref(false);
 export default defineComponent({
   components: { USteps, UPopup },
   setup() {
@@ -242,6 +258,12 @@ export default defineComponent({
       // showImage.value = true;
       pickIndex.value = index;
     };
+    //取消接单
+    const handleCanceltake = () => {
+      showTake.value = false;
+    };
+    //接单
+    const handletake = () => {};
     //确认订单步骤条配置
     const stepList = [
       {
@@ -257,8 +279,26 @@ export default defineComponent({
         title: "已完成",
       },
     ];
+    //是否接单
+    const handleTakeOrder = () => {
+      console.log("确认接单吗");
+      showTake.value = true;
+    };
+    //接单
+    const handleTake = () => {
+      showTake.value = false;
+      showLoading("接单中...");
+      try {
+        hideLoading();
+      } catch (error) {
+        hideLoading();
+      }
+    };
     return {
+      handleTakeOrder,
+      handleTake,
       active,
+      showTake,
       repairIndex,
       stepList,
       showPhone,
@@ -270,6 +310,8 @@ export default defineComponent({
       pickIndex,
       showImage,
       handleCallUser,
+      handleCanceltake,
+      handletake,
     };
   },
   onLoad(option) {
@@ -461,6 +503,31 @@ export default defineComponent({
         height: 90%;
         object-fit: contain;
       }
+    }
+  }
+}
+.takeOrder {
+  width: 600rpx;
+  position: relative;
+  padding-bottom: 100rpx;
+  &-title {
+    display: block;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 20rpx;
+    font-size: $uni-font-size-xl;
+    color: $uni-color-primary;
+    font-weight: 600;
+  }
+  &-button {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    bottom: 0;
+    button {
+      font-size: $uni-font-size-lg;
+      width: 50%;
     }
   }
 }

@@ -48,20 +48,21 @@ export const requestGetAllRepairOrderById = (params: { id: number }) => {
  *
  * @return {*}
  */
-export const requestGetAllRepairOrderByWorker = ( 
+export const requestGetAllRepairOrderByWorker = (
   params?: {
-  /* 当前页码 */
-  current?: number;
-  /* 页码数据量 */
-  pageSize?: number;
-  /* 查询开始日期 */
-  startAt?: string;
-  /* 查询结束日期 */
-  endAt?: string;
-  [key: string]: unknown;
-},
-options?: { [key: string]: any }) => {
-  return http.request({ 
+    /* 当前页码 */
+    current?: number;
+    /* 页码数据量 */
+    pageSize?: number;
+    /* 查询开始日期 */
+    startAt?: string;
+    /* 查询结束日期 */
+    endAt?: string;
+    [key: string]: unknown;
+  },
+  options?: { [key: string]: any }
+) => {
+  return http.request({
     url: `/api/repairOrder/volunteer/my`,
     method: "GET",
     data: {},
@@ -70,4 +71,8 @@ options?: { [key: string]: any }) => {
   });
 };
 
-
+/**
+ * 接受订单
+ *
+ * @return {*}
+ */
