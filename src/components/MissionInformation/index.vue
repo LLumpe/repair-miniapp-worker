@@ -153,7 +153,7 @@ import PlacesPopup from "./PlacesPopup.vue";
 import mapSettings from "@/config/map";
 import { useLocation } from "@/uses/useLocation";
 import { navigateTo } from "@/utils/helper";
-const repairIndex: Ref<number> = ref(1);
+const repairIndex: Ref<number> = ref(0);
 const pickIndex: Ref<number> = ref(0);
 const show: Ref<boolean> = ref(false);
 const showImage: Ref<boolean> = ref(false);
@@ -194,15 +194,6 @@ export default defineComponent({
       });
     };
     const index = 0;
-
-    // const array = props.data.repairEquipmentContent.map(
-    //   (item: object, index: number) => {
-    //     return `当前设备  ${index + 1} ( 总计 ${
-    //       props.data.repairEquipmentContent.length
-    //     } 个)`;
-    //   }
-    // );
-
     const getCurrentRepairEquipment = () => {
       const equipment = props.data.repairEquipmentContent.map(
         (item: object, index: number) => {

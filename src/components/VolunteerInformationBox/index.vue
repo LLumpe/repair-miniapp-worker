@@ -37,7 +37,8 @@
           :key="item.id"
           @click="handleNavigateToRepairList(item.id)"
         >
-          <UBadge
+          <image :src="item.icon" class="list-box-image" />
+          <!-- <UBadge
             class="uni-badge-left-margin"
             :text="item.value"
             absolute="rightTop"
@@ -45,7 +46,7 @@
             v-if="status !== 'unlogin'"
           >
             <image :src="item.icon" class="list-box-image" />
-          </UBadge>
+          </UBadge> -->
           <image
             :src="item.icon"
             class="list-box-image"
@@ -457,7 +458,7 @@ export default defineComponent({
       {
         id: 4,
         icon: "../../static/images/user/cancel.png",
-        title: "退单",
+        title: "已售后",
         value: 1,
       },
     ];

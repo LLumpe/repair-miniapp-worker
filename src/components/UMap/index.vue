@@ -104,7 +104,8 @@ export default defineComponent({
       default: false,
     },
   },
-  setup(props, { expose }) {
+  emits: ["clickMark"],
+  setup(props, { emit }) {
     const { ctx }: any = getCurrentInstance();
     //地图实例
     const mapContext = uni.createMapContext("map", ctx);
@@ -155,6 +156,7 @@ export default defineComponent({
                 latitude: item.latitude,
                 longitude: item.longitude,
               });
+              emit("clickMark", item.id);
             }
           });
         }

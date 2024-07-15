@@ -121,12 +121,6 @@
       }
     },
     {
-      "path": "pages/mission/index",
-      "style": {
-        "navigationBarTitleText": "寻人"
-      }
-    },
-    {
       "path": "pages/requestSubscribeMessage/index",
       "style": {
         "navigationBarTitleText": "设置订阅"
@@ -143,6 +137,16 @@
       "style": {
         "navigationBarTitleText": "救援流程"
       }
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "pagesPackage/minePackage",
+      "pages": [
+        {
+          "path": ""
+        }
+      ]
     }
   ],
   "globalStyle": {
@@ -176,7 +180,8 @@
       }
     ]
   },
-  "condition": { //模式配置，仅开发期间生效
+  "condition": {
+    //模式配置，仅开发期间生效
     "current": 0, //当前激活的模式（list 的索引项）
     "list": [
       {

@@ -6,7 +6,7 @@
           <title class="box-form-item-title">维修描述</title>
           <view label="图片描述" class="box-form-item-desc">
             <textarea
-              v-model="formData.desc"
+              v-model="formData.repairDesc"
               type="textArea"
               placeholder="请输入维修描述"
               maxlength="50"
@@ -17,7 +17,7 @@
           <title class="box-form-item-title">上传维修照片</title>
           <view label="上传图片" class="box-form-item-image">
             <UUploader
-              v-modal="formData.file"
+              v-modal="formData.repairImg"
               :image-styles="imageStyles"
               @select="handleImageSelect"
               @delete="handleDelete"
@@ -40,6 +40,7 @@ import UUploader from "@/components/UUploader/index.vue";
 import { requestUploadImage } from "@/api/myRepairOrder";
 import UInput from "@/components/UInput/index.vue";
 import UEasyInput from "@/components/UEasyInput/index.vue";
+import { requestWorkerFinishOrder } from "@/api/repairOrder";
 import {
   hideLoading,
   navigateBack,
@@ -50,8 +51,8 @@ import {
 } from "@/utils/helper";
 export interface formType {
   id: string;
-  desc: string;
-  file: object[];
+  repairDesc: string;
+  repairImg: Array<string> | string;
 }
 export default defineComponent({
   name: "UploadRepairImage",
@@ -62,19 +63,31 @@ export default defineComponent({
     },
   },
   components: { UUploader },
-  setup() {
+  setup(props) {
     const formData = reactive<formType>({
-      id: "",
-      desc: "",
-      file: [],
+      id: props.id,
+      repairDesc: "",
+      repairImg: [],
     });
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+      showLoading("提交中");
+      let timeout;
       try {
+        formData.repairImg = JSON.stringify(formData.repairImg);
+        const res = await requestWorkerFinishOrder(formData);
+        if (res.data?.success) {
+          hideLoading();
+          showToast("完成订单成功", "success");
+          timeout = setTimeout(() => {
+            uni.navigateBack({ delta: 2 });
+          }, 600);
+        }
       } catch (error) {
         console.log(error);
         hideLoading();
         showModalError("上传图片失败");
       }
+      clearTimeout(timeout);
     };
     //选择图片
     const handleImageSelect = async (e: any) => {
@@ -82,13 +95,7 @@ export default defineComponent({
       try {
         const tempFilePath = e.tempFilePaths[0];
         const imageUrl = await requestUploadImage(tempFilePath);
-        let path = {
-          url: imageUrl.data.data,
-          extname: "",
-          tempFilePath: tempFilePath,
-          name: "",
-        };
-        formData.file.push(path);
+        formData.repairImg.push(imageUrl.data.data as string);
         showToast("加载成功", "success");
         hideLoading();
       } catch (error) {
@@ -102,12 +109,7 @@ export default defineComponent({
     };
     //删除照片
     const handleDelete = (e: any) => {
-      console.log("e", e);
-      const num = formData.file.findIndex(
-        (item: any) => item?.tempFilePath === e.tempFilePath
-      );
-      console.log("e", num);
-      formData.file.splice(num, 1);
+      formData.repairImg.splice(e.index, 1);
     };
     //照片样式
     const imageStyles = {

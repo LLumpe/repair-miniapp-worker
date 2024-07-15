@@ -169,49 +169,6 @@
           </view>
         </view>
       </u-popup>
-      <!-- <u-popup
-        v-model="showImage"
-        custom-class="place-info-popup"
-        mode="center"
-        :border-radius="20"
-      >
-        <view class="popup-box">
-          <swiper
-            class="popup-box-swiper"
-            :indicator-dots="true"
-            :autoplay="false"
-            :animation="false"
-            :interval="3000"
-            :duration="200"
-            :current="pickIndex"
-            circular
-          >
-            <swiper-item
-              class="popup-box-swiper-item"
-              v-for="(item, index) in orderDetail.repairEquipmentContent[
-                repairIndex
-              ].equipmentImg"
-              :key="index"
-            >
-              <image :src="item" />
-            </swiper-item>
-          </swiper>
-        </view>
-      </u-popup> -->
-      <u-popup
-        v-model="showTake"
-        custom-class="place-info-popup"
-        mode="center"
-        :border-radius="20"
-      >
-        <view class="takeOrder">
-          <title class="takeOrder-title">确认接单吗？</title>
-          <view class="takeOrder-button">
-            <button @click="handleCanceltake">取消</button>
-            <button @click="handleTake">确认</button>
-          </view>
-        </view>
-      </u-popup>
     </view>
   </view>
 </template>
@@ -220,7 +177,9 @@
 import { Ref, computed, defineComponent, ref } from "vue";
 import USteps from "@/components/USteps/index.vue";
 import UPopup from "@/components/UPopup/index.vue";
-import { hideLoading, showLoading } from "@/utils/helper";
+import { hideLoading, showLoading, showToast } from "@/utils/helper";
+import { requestTakeRepairOrder } from "@/api/repairOrder";
+import { repairOrder } from "@/api/types/models";
 const orderDetail: Ref<object | {}> = ref({});
 const equipmentList: Ref<any> = ref([]);
 const repairIndex: Ref<number> = ref(0);
@@ -262,8 +221,6 @@ export default defineComponent({
     const handleCanceltake = () => {
       showTake.value = false;
     };
-    //接单
-    const handletake = () => {};
     //确认订单步骤条配置
     const stepList = [
       {
@@ -279,20 +236,45 @@ export default defineComponent({
         title: "已完成",
       },
     ];
-    //是否接单
-    const handleTakeOrder = () => {
-      console.log("确认接单吗");
-      showTake.value = true;
-    };
     //接单
-    const handleTake = () => {
+    const handleTake = async () => {
       showTake.value = false;
       showLoading("接单中...");
       try {
+        const new_data = {
+          ...orderDetail.value,
+          repairEquipmentContent: JSON.stringify(
+            orderDetail.value.repairEquipmentContent
+          ),
+        };
+        console.log("new_data", new_data);
+        const res = await requestTakeRepairOrder(new_data);
+        if (res.data.success) {
+          hideLoading();
+          showToast("接单成功", "success");
+          setTimeout(() => {
+            uni.switchTab({
+              url: "/pages/myMissions/index",
+            });
+          }, 600);
+        }
         hideLoading();
       } catch (error) {
         hideLoading();
       }
+    };
+    //是否接单
+    const handleTakeOrder = () => {
+      uni.showModal({
+        title: "提示",
+        content: "是否接单？",
+        success: (result) => {
+          handleTake();
+        },
+        fail(result) {
+          console.log("用户取消了接单");
+        },
+      });
     };
     return {
       handleTakeOrder,
@@ -311,7 +293,6 @@ export default defineComponent({
       showImage,
       handleCallUser,
       handleCanceltake,
-      handletake,
     };
   },
   onLoad(option) {

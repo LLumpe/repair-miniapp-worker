@@ -4,8 +4,8 @@
       <view class="box-info">
         <view class="box-info-user">
           <image
-            src="@/static/images/icon/user.png"
-            style="width: 80rpx; height: 80rpx"
+            :src="orderDetail.volunteer.avatarUrl"
+            style="width: 80rpx; height: 80rpx; border-radius: 50%"
           />
           <view
             style="
@@ -16,7 +16,7 @@
             "
           >
             <span style="font-size: 30rpx">
-              {{ test_data.name || "N/A" }}
+              {{ orderDetail.volunteerInformation.name || "N/A" }}
             </span>
           </view>
           <view
@@ -34,68 +34,43 @@
               src="@/static/images/repairDetail/phone-call.png"
             />
             <span style="margin-left: 10rpx; font-size: 26rpx; color: #999">{{
-              test_data.phone || "N/A"
+              orderDetail.volunteer.phone || "N/A"
             }}</span>
           </view>
         </view>
-        <!-- <view class="box-info-item">
-          <view class="box-info-item-label">维修设备</view>
-          <view class="box-info-item-value">
-            <picker
-              :value="repairIndex"
-              :range="equipmentList"
-              @change="handlePickDevice"
-            >
-              <view
-                style="display: flex; flex-direction: row; align-items: center"
-              >
-                <view class="info-device-content-item">{{
-                  equipmentList[repairIndex] || "N/A"
-                }}</view>
-                <text class="iconfont icon-arrow-right" />
-              </view>
-            </picker>
-          </view>
-        </view> -->
-        <!-- <view class="box-info-item">
-          <view class="box-info-item-label">设备名</view>
-          <view class="box-info-item-value">{{
-            orderDetail.repairEquipmentContent[repairIndex].equipmentName ||
-            "N/A"
-          }}</view>
-        </view> -->
-        <view class="box-info-item">
+        <view v-if="orderDetail.state !== 2" class="box-info-item">
           <view class="box-info-item-label">维修描述</view>
-          <view class="box-info-item-value">{{ test_data.desc || "N/A" }}</view>
+          <view class="box-info-item-value">{{
+            orderDetail.repairDesc || "N/A"
+          }}</view>
         </view>
-        <view class="box-info-item">
+        <view v-if="orderDetail.state !== 2" class="box-info-item">
           <view class="box-info-item-label">维修图片</view>
           <view class="box-info-item-value">
             <view
-              v-if="test_data.repairPicture || test_data.repairPicture.length"
+              v-if="orderDetail.repairImg || orderDetail.repairImg.length"
               class="box-info-item-value-image"
             >
               <view
                 class="box-info-item-value-image-item"
-                v-for="(item, index) in test_data.repairPicture"
+                v-for="(item, index) in orderDetail.repairImg"
                 :key="index"
                 @click="showImageEvent(item, index)"
               >
                 <image :src="item" />
               </view>
             </view>
-            <view
-              v-if="!test_data.repairPicture && !test_data.repairPicture.length"
+            <view v-if="!orderDetail.repairImg && !orderDetail.repairImg.length"
               >暂无照片</view
             >
           </view>
         </view>
       </view>
-      <view class="box-divide" />
-      <view class="box-info-item">
+      <view v-if="orderDetail.state !== 2" class="box-divide" />
+      <view v-if="orderDetail.state !== 2" class="box-info-item">
         <view class="box-info-item-label">维修时间</view>
         <view class="box-info-item-value">
-          {{ test_data.createAt || "N/A" }}
+          {{ orderDetail.finishAt || "N/A" }}
         </view>
       </view>
     </view>
@@ -107,7 +82,10 @@
     >
       <view class="phone">
         <view class="phone-title">联系师傅</view>
-        <view class="phone-number" @click="handleCallUser(orderDetail.phone)">
+        <view
+          class="phone-number"
+          @click="handleCallUser(orderDetail.volunteer.phone)"
+        >
           <view style="display: flex; align-items: center">
             <image
               style="width: 40rpx; height: 40rpx; margin-right: 20rpx"
@@ -118,7 +96,8 @@
           </view>
 
           <span
-            >{{ test_data.phone }} <text class="iconfont icon-arrow-right"
+            >{{ orderDetail.volunteer.phone }}
+            <text class="iconfont icon-arrow-right"
           /></span>
         </view>
       </view>
@@ -190,7 +169,6 @@ export default defineComponent({
   },
   setup(props) {
     console.log("props---->", props.orderDetail);
-
     //待维修设备选择设备
     const handlePickDevice = (e: any) => {
       console.log("value", e.target.value);
@@ -335,31 +313,6 @@ export default defineComponent({
       border: 1rpx solid $uni-border-color;
     }
 
-    .phone {
-      width: 100%;
-      height: 200rpx;
-      &-title {
-        width: 100%;
-        text-align: center;
-        font-size: 32rpx;
-        margin-top: 20rpx;
-      }
-
-      &-number {
-        width: 100%;
-        @include flex;
-        justify-content: space-between;
-        margin-top: 30rpx;
-        padding: 30rpx;
-        border-radius: 20rpx;
-        box-sizing: border-box;
-
-        &:active {
-          background-color: $uni-click-black;
-        }
-      }
-    }
-
     .popup-box {
       width: 600rpx;
       height: 600rpx;
@@ -380,6 +333,30 @@ export default defineComponent({
             object-fit: contain;
           }
         }
+      }
+    }
+  }
+  .phone {
+    width: 100%;
+    height: 200rpx;
+    &-title {
+      width: 100%;
+      text-align: center;
+      font-size: 32rpx;
+      margin-top: 20rpx;
+    }
+
+    &-number {
+      width: 100%;
+      @include flex;
+      justify-content: space-between;
+      margin-top: 30rpx;
+      padding: 30rpx;
+      border-radius: 20rpx;
+      box-sizing: border-box;
+
+      &:active {
+        background-color: $uni-click-black;
       }
     }
   }

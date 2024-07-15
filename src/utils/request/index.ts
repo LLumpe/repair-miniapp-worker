@@ -22,7 +22,7 @@ const refreshToken = async () => {
 };
 
 const http = new Request({
-  // baseURL: "http://192.168.239.59:8087",
+  // baseURL: "http://192.168.1.102:8087",
   baseURL: "https://shopping.tgucsdn.club",
 });
 

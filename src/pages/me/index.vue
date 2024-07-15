@@ -48,14 +48,6 @@ export default defineComponent({
 
     return { ...useTop(), logged, topStatus, myInfo };
   },
-  onShow() {
-    store.dispatch(ActionTypes.getRepairOrdersByWorker);
-    store.dispatch(ActionTypes.getWorkingRepairOrderByWorker);
-    store.dispatch(ActionTypes.getUnconfirmedRepairOrderByWorker);
-    store.dispatch(ActionTypes.getFinishedRepairOrderByWorker);
-    store.dispatch(ActionTypes.getBackRepairOrderByWorker);
-    // store.dispatch(ActionTypes.getMyAllMissions);
-  },
 });
 </script>
 

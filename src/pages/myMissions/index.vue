@@ -9,6 +9,7 @@
         :currentLocation="currentLocation"
         ref="map"
         :markers="repairOrderMarkers"
+        @clickMark="handleClickMark"
       />
     </view>
 
@@ -71,19 +72,14 @@
         <empty message="暂时还没有你的任务哦，去任务大厅看看吧～" />
       </view>
       <view class="list-box">
-        <view
-          v-for="item in repairOrderInfo"
-          :key="item.id"
-          class="list-item"
-          @click="handleClickShowmore(item)"
-        >
+        <view v-for="item in repairOrderInfo" :key="item.id" class="list-item">
           <view class="header">
             <view class="header-publisher">
               <image class="avatar" :src="item.familyUser.avatarUrl" />
               <view class="publisher-info">
                 <view class="name">
                   {{ item.name }}
-                  <view class="header-more">
+                  <view class="header-more" @click="handleClickShowmore(item)">
                     查看更多
                     <text class="iconfont icon-arrow-right" />
                   </view>
@@ -134,7 +130,9 @@
               </view>
             </view>
             <view class="content-accept">
-              <view class="content-accept-action">接受</view>
+              <view class="content-accept-action" @click="handleTake(item)"
+                >接受</view
+              >
             </view>
           </view>
         </view>
@@ -172,80 +170,7 @@ const repairOrderInfo: Ref<repairOrder[] | []> = ref([]);
 //当前位置
 const currentLocation = reactive({ latitude: 0, longitude: 0 });
 //地图组件标记维修订单点位
-const repairOrderMarkers: Ref<any[] | []> = ref([
-  {
-    id: 1,
-    latitude: 30.916772,
-    longitude: 121.47439,
-    iconPath: "/static/images/map/user_location.png", // 需要自定义图标
-    width: 30,
-    height: 30,
-    callout: {
-      content: "奉贤信息大厦",
-      color: "#fff",
-      fontSize: 10,
-      borderRadius: 4,
-      borderWidth: 1,
-      bgColor: "#59A9FF",
-      padding: "5",
-      display: "ALWAYS",
-    },
-  },
-  {
-    id: 2,
-    latitude: 30.918985,
-    longitude: 121.476623,
-    iconPath: "/static/images/map/user_location.png", // 需要自定义图标
-    width: 30,
-    height: 30,
-    callout: {
-      content: "广播电视台",
-      color: "#fff",
-      fontSize: 10,
-      borderRadius: 4,
-      borderWidth: 1,
-      bgColor: "#59A9FF",
-      padding: "5",
-      display: "ALWAYS",
-    },
-  },
-  {
-    id: 3,
-    latitude: 30.915568,
-    longitude: 121.475424,
-    iconPath: "/static/images/map/user_location.png", // 需要自定义图标
-    width: 30,
-    height: 30,
-    callout: {
-      content: "曙光新苑",
-      color: "#fff",
-      fontSize: 10,
-      borderRadius: 4,
-      borderWidth: 1,
-      bgColor: "#59A9FF",
-      padding: "5",
-      display: "ALWAYS",
-    },
-  },
-  {
-    id: 4,
-    latitude: 30.91783,
-    longitude: 121.472629,
-    iconPath: "/static/images/map/user_location.png", // 需要自定义图标
-    width: 30,
-    height: 30,
-    callout: {
-      content: "绿的翡翠国际广场",
-      color: "#fff",
-      fontSize: 10,
-      borderRadius: 4,
-      borderWidth: 1,
-      bgColor: "#59A9FF",
-      padding: "5",
-      display: "ALWAYS",
-    },
-  },
-]);
+const repairOrderMarkers: Ref<any[] | []> = ref([]);
 //从vuex获取缓存维修订单信息
 const useTaskList = () => {
   const store = useStore();
@@ -282,10 +207,37 @@ const getLocation = () => {
 const getRepairOrder = (params: any) => {
   return new Promise<void>(async (resolve, reject) => {
     try {
+      const orderMarkers: Array<any> = [];
       const res = await requestGetAllRepairOrder(params);
+
       if (res.data?.result) {
         console.log("res", res.data?.result);
-        repairOrderInfo.value = res.data?.result;
+        repairOrderInfo.value = res.data?.result.records.filter(
+          (item: any) => item.state === 1
+        );
+        res.data?.result.records
+          .filter((item: any) => item.state === 1)
+          .map((item: any) => {
+            orderMarkers.push({
+              id: item.id,
+              latitude: item.latitude,
+              longitude: item.longitude,
+              iconPath: "/static/images/map/user_location.png",
+              width: 30,
+              height: 30,
+              callout: {
+                content: "绿的翡翠国际广场",
+                color: "#fff",
+                fontSize: 10,
+                borderRadius: 4,
+                borderWidth: 1,
+                bgColor: "#59A9FF",
+                padding: "5",
+                display: "ALWAYS",
+              },
+            });
+          });
+        repairOrderMarkers.value = orderMarkers;
       }
     } catch (e) {
       console.log(e);
@@ -308,6 +260,10 @@ export default defineComponent({
       [1, "asc"],
       [2, "desc"],
     ]);
+    //点击地图小标事件
+    const handleClickMark = (e: any) => {
+      console.log("clickMarkEvent", e);
+    };
     //当前选择的排序配置
     const disSortOption = ref(0);
     const timeSortOption = ref(0);
@@ -315,11 +271,26 @@ export default defineComponent({
     const handleClickShowmore = (item: any) => {
       navigateTo("/pages/missionInformation/index", { id: item.id });
     };
+    //接单
+    const handleTake = (item: any) => {
+      console.log("handleTake", item);
+      uni.showModal({
+        title: "提示",
+        content: "确定要接单吗？",
+        success: (result) => {},
+        fail: (result) => {
+          console.log("取消了接单");
+        },
+      });
+    };
     //切换排序顺序，0-不排序，1-升序，2-降序
     const changeDisSortOption = () => {
       disSortOption.value = (disSortOption.value + 1) % 3;
       const params = {
-        distance: sortOptions.get(disSortOption?.value),
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
+        orderColumn: "distance",
+        orderWay: sortOptions.get(disSortOption?.value),
       };
       getRepairOrder(params);
       console.log(disSortOption.value);
@@ -328,12 +299,15 @@ export default defineComponent({
     const changeTimeSortOption = () => {
       timeSortOption.value = (timeSortOption.value + 1) % 3;
       const params = {
-        distance: sortOptions.get(timeSortOption?.value),
+        orderColumn: "created_at",
+        orderWay: sortOptions.get(timeSortOption?.value),
       };
       getRepairOrder(params);
       console.log(timeSortOption.value);
     };
     return {
+      handleTake,
+      handleClickMark,
       changeDisSortOption,
       changeTimeSortOption,
       handleClickShowmore,
@@ -355,7 +329,7 @@ export default defineComponent({
     getRepairOrder({});
     //每次页面出现重新获取位置
     getLocation();
-    store.dispatch(ActionTypes.getRepairOrders);
+    // store.dispatch(ActionTypes.getRepairOrders);
   },
 });
 </script>
@@ -462,7 +436,6 @@ export default defineComponent({
     width: 100%;
     height: 1200rpx;
     padding-top: 20rpx;
-    overflow: auto;
   }
   &-item {
     margin: 0 auto 30rpx auto;

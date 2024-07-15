@@ -1,7 +1,7 @@
 import http from "@/utils/request";
 import { ResponseData, JavaList, repairOrder } from "./types/models";
 /**
- * 获取所有维修订单
+ * 分页获取所有维修订单
  *
  * @return {*}
  */
@@ -20,7 +20,7 @@ export const requestGetAllRepairOrder = (
   options?: { [key: string]: any }
 ) => {
   return http.request({
-    url: `api/repairOrder`,
+    url: `api/repairOrder/page`,
     method: "GET",
     params: params,
     data: {},
@@ -76,3 +76,27 @@ export const requestGetAllRepairOrderByWorker = (
  *
  * @return {*}
  */
+export const requestTakeRepairOrder = (data: any) => {
+  return http.request({
+    url: `/api/repairOrder/receive`,
+    method: "POST",
+    data: data,
+    params: {},
+    custom: { noAuth: true },
+  });
+};
+
+/**
+ * 维修师傅完成订单
+ *
+ * @return {*}
+ */
+export const requestWorkerFinishOrder = (data: any) => {
+  return http.request({
+    url: `/api/repairOrder/finish`,
+    method: "POST",
+    data: data,
+    params: {},
+    custom: { noAuth: true },
+  });
+};

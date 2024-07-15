@@ -13049,11 +13049,6 @@
   "resolved" "https://registry.npmmirror.com/uuid/-/uuid-8.3.2.tgz"
   "version" "8.3.2"
 
-"uview-ui@^1.8.8":
-  "integrity" "sha512-Osal3yzXiHor0In9OPTZuXTaqTbDglMZ9RGK/MPYDoQQs+y0hrBCUD0Xp5T70C8i2lLu2X6Z11zJhmsQWMR7Jg=="
-  "resolved" "https://registry.npmmirror.com/uview-ui/-/uview-ui-1.8.8.tgz"
-  "version" "1.8.8"
-
 "v8-compile-cache@^2.0.3":
   "integrity" "sha1-lHHvo++RKNL3xqfKOcTda1BVsTI="
   "resolved" "https://registry.npm.taobao.org/v8-compile-cache/download/v8-compile-cache-2.2.0.tgz?cache=0&sync_timestamp=1603909396193&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fv8-compile-cache%2Fdownload%2Fv8-compile-cache-2.2.0.tgz"

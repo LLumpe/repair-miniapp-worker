@@ -40,10 +40,10 @@ const segIndex: Ref<number | undefined> = ref(0);
 const pageIndex: Ref<number | undefined> = ref(0);
 //pageIndex转换为state
 const state = new Map([
-  [0, 0],
-  [1, 1],
-  [2, 2],
-  [3, 3],
+  [0, 5],
+  [1, 2],
+  [2, 3],
+  [3, 4],
   [4, -10],
 ]);
 export default defineComponent({
@@ -51,7 +51,7 @@ export default defineComponent({
   components: { USegment, RepairListItem },
 
   setup(props, ctx) {
-    const items = ["全部", "进行中", "待确认", "已完成", "退单"];
+    const items = ["全部", "进行中", "待确认", "已完成", "已售后"];
     console.log("state", state);
     const onClickItem = (value: any) => {
       console.log("state.get", state.get(value.currentIndex));
@@ -61,10 +61,8 @@ export default defineComponent({
     return { items, segIndex, onClickItem, pageIndex, state };
   },
   onLoad(option) {
-    if (option?.pageIndex) {
-      segIndex.value = option.pageIndex;
-      pageIndex.value = state.get(Number(option.pageIndex));
-    }
+    segIndex.value = option.pageIndex ?? 0;
+    pageIndex.value = state.get(Number(option.pageIndex ?? 0));
   },
 });
 </script>
