@@ -35,19 +35,14 @@
       "path": "pages/repairList/index",
       "style": {
         "navigationBarTitleText": "我的订单",
-        "navigationBarBackgroundColor": "#ffffff"
+        "navigationBarBackgroundColor": "#ffffff",
+        "enablePullDownRefresh": true
       }
     },
     {
       "path": "pages/repairDetail/index",
       "style": {
         "navigationBarTitleText": "我的订单详情"
-      }
-    },
-    {
-      "path": "pages/test/index",
-      "style": {
-        "navigationBarTitleText": "测试页"
       }
     },
     {
@@ -109,12 +104,6 @@
       }
     },
     {
-      "path": "pages/missionHall/index",
-      "style": {
-        "navigationBarTitleText": "任务大厅"
-      }
-    },
-    {
       "path": "pages/myMissions/index",
       "style": {
         "navigationStyle": "custom"
@@ -127,12 +116,6 @@
       }
     },
     {
-      "path": "pages/faceRecognitionHistory/index",
-      "style": {
-        "navigationBarTitleText": "人脸识别历史结果"
-      }
-    },
-    {
       "path": "pages/tips/index",
       "style": {
         "navigationBarTitleText": "救援流程"
@@ -142,16 +125,12 @@
   "subPackages": [
     {
       "root": "pagesPackage/minePackage",
-      "pages": [
-        {
-          "path": ""
-        }
-      ]
+      "pages": []
     }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "归家行动志愿者端",
+    "navigationBarTitleText": "高阳中捷维修接单",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#f0f2f5"
   },
@@ -221,11 +200,6 @@
       {
         "name": "排行榜",
         "path": "pages/leaderBoard/index",
-        "query": ""
-      },
-      {
-        "name": "任务大厅",
-        "path": "pages/missionHall/index",
         "query": ""
       },
       {

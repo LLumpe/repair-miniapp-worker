@@ -153,8 +153,14 @@ import { ActionTypes } from "@/enums/actionTypes";
 import { useStore } from "vuex";
 import Empty from "@/components/Empty/index.vue";
 import { useLocation } from "@/uses/useLocation";
+import { requestTakeRepairOrder } from "@/api/repairOrder";
 import { requestGetAllRepairOrder } from "@/api/repairOrder";
-import { navigateTo, showToast } from "@/utils/helper";
+import {
+  hideLoading,
+  navigateTo,
+  showLoading,
+  showToast,
+} from "@/utils/helper";
 import {
   computed,
   ComputedRef,
@@ -263,6 +269,7 @@ export default defineComponent({
     //点击地图小标事件
     const handleClickMark = (e: any) => {
       console.log("clickMarkEvent", e);
+      navigateTo("/pages/missionInformation/index", { id: e });
     };
     //当前选择的排序配置
     const disSortOption = ref(0);
@@ -271,17 +278,43 @@ export default defineComponent({
     const handleClickShowmore = (item: any) => {
       navigateTo("/pages/missionInformation/index", { id: item.id });
     };
-    //接单
+    //是否接单
     const handleTake = (item: any) => {
-      console.log("handleTake", item);
       uni.showModal({
         title: "提示",
         content: "确定要接单吗？",
-        success: (result) => {},
-        fail: (result) => {
+        success: (result) => {
+          console.log("用户接单");
+          handleTakeOrder(item);
+        },
+        fail: () => {
           console.log("取消了接单");
         },
       });
+    };
+    //接单
+    const handleTakeOrder = async (item: any) => {
+      showLoading("接单中...");
+      console.log("item", item);
+      const new_Data = {
+        ...item,
+        orderFlowDate: null,
+        orderFlowDesc: null,
+        orderFlowFinish: null,
+        orderFlowList: null,
+        orderFlowState: null,
+      };
+      try {
+        const res = await requestTakeRepairOrder(new_Data);
+        if (res.data.success) {
+          hideLoading();
+          showToast("接单成功", "success");
+          getRepairOrder({});
+        }
+        hideLoading();
+      } catch (error) {
+        hideLoading();
+      }
     };
     //切换排序顺序，0-不排序，1-升序，2-降序
     const changeDisSortOption = () => {
@@ -307,6 +340,7 @@ export default defineComponent({
     };
     return {
       handleTake,
+      handleTakeOrder,
       handleClickMark,
       changeDisSortOption,
       changeTimeSortOption,

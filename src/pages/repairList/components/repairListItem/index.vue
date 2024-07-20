@@ -49,9 +49,10 @@ import { requestGetAllWorkerRepairOrder } from "@/api/myRepairOrder";
 import { Case, repairOrder } from "@/api/types/models";
 import { RepairOrder } from "@/store/types";
 import { showToast } from "@/utils/helper";
-import { reactive, defineComponent, ref, Ref, watch } from "vue";
+import { reactive, defineComponent, ref, Ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import Empty from "@/components/Empty/index.vue";
+import store from "@/store";
 //维修标签状态
 const repairLabel = {
   "2": "进行中",
@@ -78,41 +79,22 @@ export default defineComponent({
   setup(props) {
     //跳转页面事件
     const handleShowMoreRepairOrder = (item: RepairOrder) => {
-      console.log("item", item);
       uni.navigateTo({
         url:
           "/pages/repairDetail/index?repairOrder=" +
           encodeURIComponent(JSON.stringify(item)),
       });
     };
-    const getRepairListItemData = async () => {
-      try {
-        console.log("pageIndex", props.pageIndex);
-        if (props.pageIndex === 5) {
-          const res = await requestGetAllWorkerRepairOrder();
-          if (res.data.result) {
-            console.log("res.data.result.records", res.data.result.records);
-            repairOrderList.value = res.data.result.records;
-          }
-        } else {
-          const res = await requestGetAllWorkerRepairOrder({
-            state: props.pageIndex,
-          });
-          if (res.data.result) {
-            console.log("res.data.result.records", res.data.result.records);
-            repairOrderList.value = res.data.result.records;
-          }
-        }
-      } catch (error) {
-        showToast("error");
-      }
-      return {
-        repairOrderList,
-      };
-    };
-    console.log("pageIndex", props.pageIndex);
+    const repairOrderList = computed(() => {
+      return store.getters.workerRepairOrder.filter((item: repairOrder) =>
+        props.pageIndex === 5
+          ? item
+          : props.pageIndex === -10
+          ? item.state >= -8 && item.state <= -3
+          : item.state === props.pageIndex
+      );
+    });
     return {
-      ...getRepairListItemData(),
       repairLabel,
       repairOrderList,
       handleShowMoreRepairOrder,

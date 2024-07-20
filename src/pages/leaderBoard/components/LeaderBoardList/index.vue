@@ -58,84 +58,35 @@ export default defineComponent({
         id: 1,
         name: "赵师傅",
         phone: "152xxxxxxxx",
-        city: "天津市",
         province: "天津区",
+        city: "天津市",
         star: 20,
       },
       {
         id: 2,
-        name: "赵师傅",
+        name: "杨师傅",
         phone: "152xxxxxxxx",
-        city: "天津市",
-        province: "天津区",
+        province: "湖南省",
+        city: "长沙市",
         star: 15,
       },
       {
         id: 3,
-        name: "赵师傅",
+        name: "段师傅",
         phone: "152xxxxxxxx",
-        city: "天津市",
-        province: "天津区",
+        province: "北京市",
+        city: "北京市",
         star: 11,
       },
       {
         id: 4,
-        name: "赵师傅",
+        name: "周师傅",
         phone: "152xxxxxxxx",
-        city: "天津市",
-        province: "天津区",
+        province: "上海市",
+        city: "上海市",
         star: 10,
       },
-      {
-        id: 5,
-        name: "赵师傅",
-        phone: "152xxxxxxxx",
-        city: "天津市",
-        province: "天津区",
-        star: 9,
-      },
-      {
-        id: 6,
-        name: "赵师傅",
-        phone: "152xxxxxxxx",
-        city: "天津市",
-        province: "天津区",
-        star: 8,
-      },
-      {
-        id: 7,
-        name: "赵师傅",
-        phone: "152xxxxxxxx",
-        city: "天津市",
-        province: "天津区",
-        star: 7,
-      },
-      {
-        id: 8,
-        name: "赵师傅",
-        phone: "152xxxxxxxx",
-        city: "天津市",
-        province: "天津区",
-        star: 5,
-      },
-      {
-        id: 9,
-        name: "赵师傅",
-        phone: "152xxxxxxxx",
-        city: "天津市",
-        province: "天津区",
-        star: 4,
-      },
-      {
-        id: 10,
-        name: "赵师傅",
-        phone: "152xxxxxxxx",
-        city: "天津市",
-        province: "天津区",
-        star: 2,
-      },
     ];
-    // const data: any[] = [];
     return {
       data,
     };
@@ -212,10 +163,9 @@ export default defineComponent({
             margin-right: 20rpx;
             margin-left: 20rpx;
             color: $uni-text-color;
-            font-size: $uni-font-size-base;
+            font-size: $uni-font-size-lg;
             letter-spacing: 2rpx;
             display: flex;
-            font-weight: 600;
             flex-direction: row;
             align-items: center;
             justify-content: space-between;

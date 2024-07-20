@@ -167,86 +167,13 @@
     </view>
     <view class="service">
       <view class="title">
-        <span class="title-name">功能服务</span>
-        <view class="title-more">
+        <span class="title-name">功能服务（敬请期待）</span>
+        <!-- <view class="title-more">
           查看功能服务
           <text class="iconfont icon-arrow-right" />
-        </view>
+        </view> -->
       </view>
     </view>
-    <!--   <view
-      v-if="historyMissions"
-      class="list"
-    >
-      <view
-        v-for="item in historyMissions"
-        :key="item.id"
-        class="list-item"
-      >
-        <view
-          v-if="item.state === 1"
-          class="list-item-badge badge-running"
-        >
-          进行中
-        </view>
-        <view
-          v-if="item.state === 2"
-          class="list-item-badge badge-complete"
-        >
-          已完成
-        </view>
-        <view
-          v-if="item.state === 3"
-          class="list-item-badge badge-timeout"
-        >
-          已归档
-        </view>
-        <view
-          v-if="item.state === 4"
-          class="list-item-badge badge-canceled"
-        >
-          已归档
-        </view>
-        <view class="list-item-content">
-          <image
-            v-if="item.oldMan"
-            class="list-item-content-photo"
-            :src="item.oldMan.identificationPhoto"
-            mode="aspectFill"
-          />
-          <view class="list-item-content-info">
-            <view class="list-item-content-info-title">
-              {{ item.district }}走失老人
-            </view>
-            <view
-              v-if="item.lostTime"
-              class="list-item-content-info-desc"
-            >
-              于 {{ item.lostTime }}
-            </view>
-            <view class="list-item-content-info-desc">
-              走失于{{ item.place }}附近
-            </view>
-          </view>
-        </view>
-        <view
-          v-if="item.state === 1"
-          class="list-item-icon icon-running"
-        />
-        <view
-          v-if="item.state === 2"
-          class="list-item-icon icon-complete"
-        />
-        <view
-          v-if="item.state === 3"
-          class="list-item-icon icon-timeout"
-        />
-        <view
-          v-if="item.state === 4"
-          class="list-item-icon icon-canceled"
-        />
-      </view> -->
-    <!--    </view> -->
   </view>
 </template>
 
@@ -266,7 +193,7 @@ import UCountTo from "../UCountTo/index.vue";
 import { Case } from "@/api/types/models";
 import { requestGetVolunteerCases } from "@/api/mission";
 import { useStore } from "vuex";
-import UBadge from "@/components/UBadge/index.vue";
+import Empty from "@/components/Empty/index.vue";
 
 const useLogin = () => {
   const handleLogin = () => {
@@ -275,59 +202,6 @@ const useLogin = () => {
 
   return { handleLogin };
 };
-
-// const useHistory = (status: "unlogin" | "me" | "user", info: any) => {
-//   const store = useStore();
-//   let userHistoryMissions: Ref<Array<Case>> = ref([]);
-
-//   const getHistoryMissions = async () => {
-//     if (status === "user" && (!info.volunteer || !info.volunteer.id)) return;
-
-//     try {
-//       const res = await requestGetVolunteerCases({
-//         volunteerId: info.volunteer.id,
-//       });
-//       if (res.data.data) {
-//         userHistoryMissions.value = res.data.data;
-//       }
-//       console.debug(res);
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   };
-
-//   if (status === "user") {
-//     getHistoryMissions();
-//   }
-
-//   const historyMissions: ComputedRef<Array<Case>> = computed(() => {
-//     return status === "me"
-//       ? store.getters.myAllMissions.reverse()
-//       : userHistoryMissions.value.reverse();
-//   });
-
-//   const doingMissionsNumber = computed(() => {
-//     return historyMissions.value.filter((item) => item.state === 1).length;
-//   });
-
-//   const endedMissionsNumber = computed(() => {
-//     return historyMissions.value.filter(
-//       (item) => item.state === 2 || item.state === 3
-//     ).length;
-//   });
-
-//   const allMissionsNumber = computed(() => {
-//     return historyMissions.value.length;
-//   });
-
-//   return {
-//     historyMissions,
-//     doingMissionsNumber,
-//     endedMissionsNumber,
-//     allMissionsNumber,
-//   };
-// };
-
 const useWorkerRepairInfo = () => {
   //注册store实例
   const store = useStore();
@@ -350,7 +224,7 @@ const useWorkerRepairInfo = () => {
   };
 };
 export default defineComponent({
-  components: { UBadge },
+  components: { Empty },
   props: {
     status: {
       type: String as PropType<"unlogin" | "me" | "user">,
@@ -716,7 +590,6 @@ export default defineComponent({
 .service {
   margin: 0 auto 20rpx auto;
   width: 700rpx;
-  height: 400rpx;
   background: #ffffff;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   border-radius: 10rpx;
@@ -725,6 +598,7 @@ export default defineComponent({
   .title {
     width: 100%;
     height: 50rpx;
+    line-height: 50rpx;
     display: flex;
     flex-direction: row;
     box-sizing: border-box;
@@ -744,104 +618,4 @@ export default defineComponent({
     }
   }
 }
-
-// .list {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   margin-top: 80rpx;
-
-//   &-item {
-//     width: 672rpx;
-//     height: 176rpx;
-//     background: #ffffff;
-//     box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(0, 0, 0, 0.5);
-//     border-radius: 10rpx;
-//     margin-bottom: 48rpx;
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
-//     padding: 24rpx 32rpx 24rpx 42rpx;
-//     box-sizing: border-box;
-//     position: relative;
-
-//     &-content {
-//       display: flex;
-
-//       &-photo {
-//         width: 128rpx;
-//         height: 128rpx;
-//         border-radius: 100%;
-//       }
-
-//       &-info {
-//         display: flex;
-//         flex-direction: column;
-//         justify-content: flex-start;
-//         margin-left: 40rpx;
-
-//         &-title {
-//           font-size: 36rpx;
-//           font-weight: 400;
-//           color: #000000;
-//           line-height: 50rpx;
-//           margin-bottom: 14rpx;
-//         }
-
-//         &-desc {
-//           font-size: 20rpx;
-//           font-weight: 400;
-//           color: #303133;
-//           line-height: 28rpx;
-//         }
-//       }
-//     }
-
-//     &-badge {
-//       width: 96rpx;
-//       height: 32rpx;
-//       border-radius: 10rpx 10rpx 10rpx 0rpx;
-//       display: flex;
-//       justify-content: center;
-//       align-items: center;
-//       font-size: 20rpx;
-//       font-weight: 400;
-//       line-height: 28rpx;
-//       position: absolute;
-//       top: 0;
-//       right: 0;
-
-//       &.badge-running {
-//         color: #303133;
-//         background: #ffa36c;
-//       }
-
-//       &.badge-complete {
-//         color: #303133;
-//         background: #799351;
-//       }
-
-//       &.badge-timeout,
-//       &.badge-canceled {
-//         color: #303133;
-//         background: #b0b2b2;
-//       }
-//     }
-
-//     &-icon {
-//       width: 60rpx;
-//       height: 60rpx;
-//       background-size: contain;
-//       background-position: 50% 50%;
-//       background-repeat: no-repeat;
-
-//       &.icon-running {
-//         background-image: url("@/static/images/icon/clock.png");
-//       }
-//       &.icon-complete {
-//         background-image: url("@/static/images/icon/done.png");
-//       }
-//     }
-//   }
-// }
 </style>

@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { ref, Ref, reactive, defineComponent } from "vue";
+import { ref, Ref, reactive, defineComponent, onUnmounted } from "vue";
 import UUploader from "@/components/UUploader/index.vue";
 import { requestUploadImage } from "@/api/myRepairOrder";
 import UInput from "@/components/UInput/index.vue";
@@ -64,6 +64,7 @@ export default defineComponent({
   },
   components: { UUploader },
   setup(props) {
+    const timeoutRef = ref<number | null>(null);
     const formData = reactive<formType>({
       id: props.id,
       repairDesc: "",
@@ -78,7 +79,7 @@ export default defineComponent({
         if (res.data?.success) {
           hideLoading();
           showToast("完成订单成功", "success");
-          timeout = setTimeout(() => {
+          timeoutRef.value = setTimeout(() => {
             uni.navigateBack({ delta: 2 });
           }, 600);
         }
@@ -87,7 +88,6 @@ export default defineComponent({
         hideLoading();
         showModalError("上传图片失败");
       }
-      clearTimeout(timeout);
     };
     //选择图片
     const handleImageSelect = async (e: any) => {
@@ -121,7 +121,13 @@ export default defineComponent({
         radius: "10px",
       },
     };
+    onUnmounted(() => {
+      if (timeoutRef.value) {
+        clearTimeout(timeoutRef.value);
+      }
+    });
     return {
+      timeoutRef,
       formData,
       handleSubmit,
       imageStyles,

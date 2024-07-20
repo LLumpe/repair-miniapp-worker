@@ -1,4 +1,11 @@
-import { Volunteer, Notice, Banner, Case, Face , repairOrder } from "@/api/types/models"
+import {
+  Volunteer,
+  Notice,
+  Banner,
+  Case,
+  Face,
+  repairOrder,
+} from "@/api/types/models";
 import Ws from "../utils/websocket";
 
 export interface RootState {
@@ -10,7 +17,7 @@ export interface RootState {
   mission: MissionState;
   websocket: WebsocketState;
   tim: TimState;
-  repairOrder:repairOrder,
+  repairOrder: repairOrder;
 }
 
 export interface UserState {
@@ -72,8 +79,6 @@ export interface TimState {
   groupIDsMap: Map<string, string>; // 群名 -> 群 ID 的 Map
 }
 
-
 export interface RepairOrder {
-  repairOrder:Array<repairOrder>;//维修订单
-  
+  workerRepairOrder: Array<repairOrder>; //维修订单
 }
