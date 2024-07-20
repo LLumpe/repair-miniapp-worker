@@ -45,9 +45,23 @@
         </view>
       </view>
 
-      <view class="block" />
+      <view
+        v-if="
+          currentRepairOrder.state !== 3 &&
+          currentRepairOrder.state !== 4 &&
+          currentRepairOrder.state >= 0
+        "
+        class="block"
+      />
 
-      <view class="box-option">
+      <view
+        v-if="
+          currentRepairOrder.state !== 3 &&
+          currentRepairOrder.state !== 4 &&
+          currentRepairOrder.state >= 0
+        "
+        class="box-option"
+      >
         <view
           v-if="currentRepairOrder.state === 2"
           class="box-option-item"
@@ -318,7 +332,7 @@ export default defineComponent({
     border-radius: 15rpx;
     &-title {
       @include flex(row);
-      height: 150rpx;
+      height: 170rpx;
       justify-content: space-around;
       h1 {
         font-size: $uni-font-size-xxl;
@@ -471,5 +485,8 @@ export default defineComponent({
       height: 130rpx;
     }
   }
+}
+.box-order-steps::-webkit-scrollbar {
+  width: 200rpx; /* 滚动条的宽度 */
 }
 </style>
