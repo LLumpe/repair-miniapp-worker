@@ -5,6 +5,7 @@ import {
   Case,
   Face,
   repairOrder,
+  Leaderboard,
 } from "@/api/types/models";
 import Ws from "../utils/websocket";
 
@@ -29,6 +30,9 @@ export interface UserState {
 export interface AnnouncementState {
   announcements: Array<Notice>;
   banners: Array<Banner>;
+  leaderboardReceive: Array<Leaderboard>;
+  leaderboardResponse: Array<Leaderboard>;
+  leaderboardCancel: Array<Leaderboard>;
 }
 
 export interface LocationState {

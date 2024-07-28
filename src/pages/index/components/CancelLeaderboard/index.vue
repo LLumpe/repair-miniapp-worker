@@ -1,3 +1,13 @@
+<!--
+ * @Author: LLumpe LLumpe@163.com
+ * @Date: 2024-07-27 02:37:20
+ * @LastEditors: LLumpe LLumpe@163.com
+ * @LastEditTime: 2024-07-28 22:16:09
+ * @FilePath: \repair-miniapp-worker\src\pages\index\components\CancelLeaderboard\index.vue
+ * @Description: 
+ * 
+ * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
+-->
 <template>
   <view class="box" @click="handleClickLeaderBoardRoom">
     <view class="border">
@@ -7,14 +17,7 @@
         mode=""
       />
       <view class="text">
-        <view class="first-text">
-          <view style="height: 56rpx"> 排行榜 </view>
-        </view>
-        <view class="second-text">
-          <view style="height: 34rpx">
-            可以查看所有维修师傅的本月接单排行
-          </view>
-        </view>
+        <h2>退单返修率</h2>
       </view>
     </view>
   </view>
@@ -23,11 +26,22 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { navigateTo } from "@/utils/helper";
+import { useStore } from "vuex";
+import authService from "@/service/authService";
+import { ActionTypes } from "@/enums/actionTypes";
 export default defineComponent({
+  name: "CancelLeaderboard",
   setup() {
+    const store = useStore();
     function handleClickLeaderBoardRoom() {
-      navigateTo("/pages/leaderBoard/index");
+      const logged = store.getters.logged;
+      if (logged) {
+        navigateTo("/pages/leaderBoard/index", { type: 3 });
+      } else {
+        authService.login();
+      }
     }
+    // store.dispatch(ActionTypes.getLeaderboardCancel);
     return { handleClickLeaderBoardRoom };
   },
 });
@@ -66,28 +80,12 @@ export default defineComponent({
     @include style(100%, 300rpx, 0, 0);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    height: 100%;
     .text {
       text-align: center;
-      flex: 1;
-      @include style(none, 100rpx, 0, 0);
-      .first-text {
-        width: 100%;
-        height: 56rpx;
-        @include font(40rpx, #000000, 56rpx);
-        letter-spacing: 10rpx;
-        display: flex;
-        justify-content: center;
-      }
-      .second-text {
-        padding: 10rpx;
-        box-sizing: border-box;
-        width: 100%;
-        height: 34rpx;
-        margin-top: 16rpx;
-        @include font(20rpx, #979797, 34rpx);
-      }
+      @include font(36rpx, #000000, 56rpx);
     }
   }
 }

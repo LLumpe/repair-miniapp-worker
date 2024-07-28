@@ -21,9 +21,9 @@
 import { Ref, computed, defineComponent, ref, watch, onMounted } from "vue";
 import USegment from "@/components/USegment/index.vue";
 import RepairListItem from "./components/repairListItem/index.vue";
-import { useStore } from "vuex";
 import store from "@/store";
 import { ActionTypes } from "@/enums/actionTypes";
+import ULoadMore from "@/components/ULoadMore/index.vue";
 import { showToast } from "@/utils/helper";
 //订单类别
 const segIndex: Ref<number | undefined> = ref(0);
@@ -46,7 +46,7 @@ const state = new Map([
 ]);
 export default defineComponent({
   name: "RepairList",
-  components: { USegment, RepairListItem },
+  components: { USegment, RepairListItem, ULoadMore },
 
   setup() {
     const items = ["全部", "进行中", "待确认", "已完成", "已售后"];
@@ -96,17 +96,28 @@ export default defineComponent({
   .box {
     width: 100%;
     .tag {
-      position: sticky;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      position: fixed;
+      z-index: 1;
       top: 0;
       width: 100%;
-      height: 70rpx;
-      z-index: 1;
+      height: 80rpx;
+      margin: auto 0;
       background-color: #ffffff;
     }
     .content {
-      margin-top: 30rpx;
+      margin-top: 100rpx;
       flex: 1;
       width: 100%;
+    }
+    .loading {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 }

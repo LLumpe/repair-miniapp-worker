@@ -1,3 +1,13 @@
+/*
+ * @Author: LLumpe LLumpe@163.com
+ * @Date: 2024-07-09 03:18:08
+ * @LastEditors: LLumpe LLumpe@163.com
+ * @LastEditTime: 2024-07-27 03:16:12
+ * @FilePath: \repair-miniapp-worker\src\api\announcement.ts
+ * @Description:
+ *
+ * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved.
+ */
 import http from "@/utils/request";
 import { Banner, JavaList, Notice, ResponseData } from "./types/models";
 
@@ -6,11 +16,11 @@ import { Banner, JavaList, Notice, ResponseData } from "./types/models";
  *
  * @return {*}
  */
-export const requestGetAnnouncements = () => {
+export const requestGetAnnouncements = (params: { [key: string]: string }) => {
   return http.request<ResponseData<JavaList<Notice>>>({
-    url: `notice`,
+    url: `api/richText`,
     method: "GET",
-    params: { roleId: 2, display: 1 },
+    params: params,
     data: {},
     custom: { noAuth: true },
   });
@@ -39,10 +49,25 @@ export const requestGetAnnouncementByID = (id: number) => {
  */
 export const requestGetBanners = () => {
   return http.request<ResponseData<JavaList<Banner>>>({
-    url: `notice/banner`,
+    url: `api/banner`,
     method: "GET",
-    params: { roleId: 2 },
+    params: { type: 2 },
     data: {},
+    custom: { noAuth: true },
+  });
+};
+
+/**
+ * 获取 排行榜 列表
+ *
+ * @return {*}
+ */
+export const requestGetLeaderboard = (data: { [key: string]: string }) => {
+  return http.request<ResponseData<JavaList<Banner>>>({
+    url: `api/repair/data`,
+    method: "POST",
+    params: {},
+    data: data,
     custom: { noAuth: true },
   });
 };

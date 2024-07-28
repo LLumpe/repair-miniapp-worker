@@ -7,8 +7,8 @@
             <view class="info-user-box">
               <image :src="data.familyUser.avatarUrl" class="avatarUrl"></image>
               <view class="info-user-name">
-                <h1>{{ data.name }}</h1>
-                <span>{{ data.createdAt }}</span>
+                <h1>{{ data.familyUser.name || "匿名用户" }}</h1>
+                <span>{{ data.createdAt || "N/A" }}</span>
               </view>
             </view>
             <view class="info-user-phone">
@@ -16,15 +16,9 @@
                 class="image"
                 src="@/static/images/repairDetail/phone-call.png"
               />
-              {{ data.phone }}
+              {{ data.familyUser.phone || "用户暂未绑定手机号" }}
             </view>
           </view>
-          <!-- <u-cell-item
-            title="设备数量"
-            :value="data.repairEquipmentNumber"
-            :arrow="false"
-            hover-class="none"
-          /> -->
           <u-cell-item
             title="期待维修日期"
             :value="data.expectDate"
@@ -44,24 +38,6 @@
             @click="handleClickRoutePlan(data)"
             hover-class="none"
           />
-          <!-- <u-cell-item
-            title="距离"
-            :value="`${getDistanceFromMe(
-              [data.longitude, data.latitude],
-              'km'
-            ).toFixed(1)} km`"
-            :arrow="false"
-            hover-class="none"
-          /> -->
-          <!-- <u-cell-item
-            title="待维修设备"
-            :value="`当前 设备 ${repairIndex + 1} ( 总计 ${
-              data.repairEquipmentContent.length
-            } 个 )`"
-            :arrow="true"
-            hover-class="none"
-            @click="handleChangeDevice"
-          /> -->
           <view class="info-device">
             <view class="info-device-title"> 待维修设备 </view>
             <view class="info-device-content">
@@ -91,7 +67,13 @@
             :arrow="false"
             hover-class="none"
           />
-          <view class="info-pic">
+          <view
+            v-if="
+              data.repairEquipmentContent[repairIndex].equipmentImg &&
+              data.repairEquipmentContent[repairIndex].equipmentImg.length !== 0
+            "
+            class="info-pic"
+          >
             <view class="info-pic-title"> 设备照片 </view>
             <view class="info-pic-image">
               <view
@@ -101,42 +83,23 @@
                 :key="index"
                 @click="showImageEvent(item, index)"
               >
-                <image :src="item" />
+                <image :src="item" mode="aspectFit" />
               </view>
             </view>
           </view>
+          <u-cell-item
+            v-if="
+              !data.repairEquipmentContent[repairIndex].equipmentImg ||
+              !data.repairEquipmentContent[repairIndex].equipmentImg.length
+            "
+            title="设备照片"
+            value="暂无待维修设备图片，请联系用户确认"
+            :arrow="false"
+            hover-class="none"
+          />
         </u-cell-group>
       </view>
     </view>
-    <u-popup
-      v-model="showImage"
-      custom-class="place-info-popup"
-      mode="center"
-      :border-radius="20"
-    >
-      <view class="popup-box">
-        <swiper
-          class="popup-box-swiper"
-          :indicator-dots="true"
-          :autoplay="false"
-          :animation="false"
-          :interval="3000"
-          :duration="200"
-          :current="pickIndex"
-          circular
-          @change="handleSwiperChange"
-        >
-          <swiper-item
-            class="popup-box-swiper-item"
-            v-for="(item, index) in data.repairEquipmentContent[repairIndex]
-              .equipmentImg"
-            :key="index"
-          >
-            <image :src="item" />
-          </swiper-item>
-        </swiper>
-      </view>
-    </u-popup>
     <view class="option">
       <view class="option-take" @click="handleTakeOrder">接单</view>
     </view>
@@ -144,15 +107,11 @@
 </template>
 
 <script lang="ts">
-import { Ref, computed, defineComponent, ref, watch } from "vue";
+import { Ref, defineComponent, ref, watch } from "vue";
 import UCellGroup from "@/components/UCellGroup/index.vue";
 import UCellItem from "@/components/UCellItem/index.vue";
-import UPopup from "@/components/UPopup/index.vue";
-import dayjs from "@/utils/dayjs";
-import PlacesPopup from "./PlacesPopup.vue";
 import mapSettings from "@/config/map";
 import { useLocation } from "@/uses/useLocation";
-import { navigateTo } from "@/utils/helper";
 const repairIndex: Ref<number> = ref(0);
 const pickIndex: Ref<number> = ref(0);
 const show: Ref<boolean> = ref(false);
@@ -161,7 +120,7 @@ const pickDeviceNo: Ref<any> = ref();
 const equipmentArray: Ref<any> = ref([]);
 export default defineComponent({
   name: "MissionInformationCom",
-  components: { UCellGroup, UCellItem, UPopup },
+  components: { UCellGroup, UCellItem },
   props: {
     data: {
       type: Object,
@@ -169,7 +128,6 @@ export default defineComponent({
     },
   },
   setup(props) {
-    var that = this;
     //轮播图切换
     const handleSwiperChange = (event: any) => {
       console.log("event", event);
@@ -227,17 +185,11 @@ export default defineComponent({
       let key = mapSettings.key; //使用在腾讯位置服务申请的key
       let referer = mapSettings.appName; //调用插件的app的名称
       console.log("key,referer", key, referer);
-      // let endPoint = JSON.stringify({
-      //   //终点
-      //   name: value.address,
-      //   latitude: value.latitude,
-      //   longitude: value.longitude,
-      // });
       let endPoint = JSON.stringify({
         //终点
-        name: "奉贤信息大厦",
-        latitude: 30.916772,
-        longitude: 121.47439,
+        name: props.data.address,
+        latitude: props.data.latitude,
+        longitude: props.data.longitude,
       });
       wx.navigateTo({
         url:
@@ -347,15 +299,6 @@ export default defineComponent({
       handlePickDevice,
       showImageEvent,
       ...useLocation(),
-      // images,
-      // handlePreviewPhoto,
-      // manAge,
-      // offenPlace,
-      // offenPlaceNumber,
-      // makePhoneCall,
-      // handleClickLostPlace,
-      // showOffenPlacesPopup,
-      // handleClickOffenPlace,
     };
   },
 });
@@ -363,43 +306,12 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .body {
-  min-height: 100vh;
-  .title {
-    line-height: 50rpx;
-    font-weight: 600;
-    margin: 20rpx;
-    padding-left: 20rpx;
-    font-size: $uni-font-size-title;
-    border-left: 6rpx solid $uni-color-primary;
-  }
   .box {
     width: 100%;
     box-sizing: border-box;
-    .problem {
-      width: 100%;
-      height: 500rpx;
-      &-swiper {
-        width: 100%;
-        height: 100%;
-        border: 1rpx solid rgba(0, 0, 0, 0.2);
-        // box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
-        //   rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-        // background-color: ghostwhite;
-        &-item {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          &-image {
-            width: 90%;
-            height: 80%;
-            object-fit: contain;
-          }
-        }
-      }
-    }
     .info {
       width: 100%;
-      margin-bottom: 101rpx;
+      // margin-bottom: 101rpx;
       &-user {
         width: 100%;
         padding: 20rpx;
@@ -563,25 +475,6 @@ export default defineComponent({
       transition: 0.2s all;
       &:active {
         background-color: $uni-click-green;
-      }
-    }
-  }
-  .popup-box {
-    width: 600rpx;
-    height: 600rpx;
-    background-color: rgba(124, 124, 124, 0.2);
-    &-swiper {
-      width: 100%;
-      height: 100%;
-      &-item {
-        display: flex;
-        // align-items: center;
-        justify-content: center;
-        image {
-          width: 100%;
-          height: 90%;
-          object-fit: contain;
-        }
       }
     }
   }

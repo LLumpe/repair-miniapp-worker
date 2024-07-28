@@ -23,7 +23,7 @@ const refreshToken = async () => {
 
 const http = new Request({
   // baseURL: "http://192.168.1.102:8087",
-  baseURL: "https://shopping.tgucsdn.club",
+  baseURL: "https://user.raymone.xyz/",
 });
 
 http.interceptors.request.use(

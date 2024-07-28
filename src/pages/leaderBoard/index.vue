@@ -8,15 +8,15 @@
           </view>
           <view class="title-left-time">
             <span>{{ year }}</span>
-            -
-            <span>{{ month }}</span>
           </view>
           <view class="title-left-content">
             <span>接单排行榜</span>
           </view>
           <view class="title-left-notice">
-            <span class="title-left-notice-text"
-              >排行结果基于维修师傅本月接单数量数据，每月更新
+            <span class="title-left-notice-text">
+              排行结果基于维修师傅本年
+              {{ message }}
+              数据实时更新
               <image
                 src="@/static/images/leaderBoard/notice.png"
                 style="margin-left: 10rpx"
@@ -32,17 +32,34 @@
         </view>
       </view>
       <view class="list">
-        <LeaderBoardList></LeaderBoardList>
+        <LeaderBoardList :type="type" />
       </view>
     </view>
   </view>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import LeaderBoardList from "./components/LeaderBoardList/index.vue";
+import store from "@/store";
+import { ActionTypes } from "@/enums/actionTypes";
+const leaderType = {
+  1: "完成订单量",
+  2: "平均响应时间",
+  3: "退单返修率",
+};
 export default defineComponent({
   components: { LeaderBoardList },
-  setup() {
+  props: {
+    type: {
+      type: Number,
+      default: 0,
+    },
+  },
+  setup(props) {
+    console.log("props", props.type);
+    const message = computed(() => {
+      return leaderType[props.type];
+    });
     /* 获取时间 */
     const [year, month] = [new Date().getFullYear(), new Date().getMonth() + 1];
     //返回
@@ -52,10 +69,17 @@ export default defineComponent({
       });
     };
     return {
+      leaderType,
+      message,
       year,
       month,
       goback,
     };
+  },
+  onShow() {
+    store.dispatch(ActionTypes.getLeaderboardReceive);
+    store.dispatch(ActionTypes.getLeaderboardResponse);
+    store.dispatch(ActionTypes.getLeaderboardCancel);
   },
 });
 </script>

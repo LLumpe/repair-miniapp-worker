@@ -1,61 +1,64 @@
 <template>
   <view>
-    <view v-if="announcement && announcement.title">
+    <view>
       <view class="name">
-        <view style="height: 66rpx;">
+        <view style="height: 66rpx">
           {{ announcement.title }}
         </view>
       </view>
-      <view class="from">
-        <view style="height:34rpx;">
-          发布人：{{ announcement.publisher }}
-        </view>
-      </view>
       <view class="time">
-        <view style="height: 34rpx;">
-          发布于：{{ announcement.time }}
+        <view style="height: 34rpx">
+          发布于：{{ announcement.createdAt }}
         </view>
       </view>
+      <view class="divide" />
       <view class="content">
-        <rich-text
-          style="width: 650rpx"
-          :nodes="announcement.content"
-        />
+        <rich-text style="width: 700rpx" :nodes="announcement.content" />
       </view>
     </view>
   </view>
-</template> 
+</template>
 
 <script lang="ts">
-import { requestGetAnnouncementByID } from "@/api/announcement";
-import { defineComponent } from "vue";
-
+import { requestGetAnnouncements } from "@/api/announcement";
+import { showLoading, showToast } from "@/utils/helper";
+import { defineComponent, ref } from "vue";
+export type announcement = {
+  id?: number;
+  scene_type?: string;
+  title?: string;
+  content?: string;
+  comment?: string;
+  created_at?: string;
+};
 export default defineComponent({
-  setup() {
-    return {};
-  },
-  onLoad(option: any) {
-    this.getAnnouncement(option.id);
-  },
-  data() {
-    return {
-      announcement: {},
-    };
-  },
-  methods: {
-    async getAnnouncement(id: number) {
-      uni.showNavigationBarLoading();
-      try {
-        const res = await requestGetAnnouncementByID(id);
-        console.log(res.data.data);
-        if (res.data.data) {
-          this.announcement = res.data.data[0];
-        }
-      } catch (e) {
-        console.log(e);
-      }
-      uni.hideNavigationBarLoading();
+  props: {
+    sceneType: {
+      type: String,
+      default: "volunteer_notice",
     },
+  },
+  setup(props) {
+    const useAnnouncement = () => {
+      const announcement = ref<announcement>({});
+      const getAnnouncement = async () => {
+        uni.showNavigationBarLoading();
+        try {
+          const res = await requestGetAnnouncements({
+            sceneType: props.sceneType,
+          });
+          if (res.data.result) {
+            announcement.value = res.data.result[0];
+          }
+        } catch (error) {
+          showToast("获取公告内容失败");
+        }
+        uni.hideNavigationBarLoading();
+      };
+      getAnnouncement();
+      return { announcement, getAnnouncement };
+    };
+    return { ...useAnnouncement() };
   },
 });
 </script>
@@ -87,7 +90,11 @@ export default defineComponent({
   @include wh(750rpx, 34rpx, 16rpx, 0);
 }
 .content {
-  @include font(24rpx, #000000, 34rpx);
-  @include wh(750rpx, 1020rpx, 30rpx, 0);
+  @include wh(750rpx, "100%", 30rpx, 0);
+}
+.divide {
+  width: 650rpx;
+  margin: 34rpx auto;
+  border: 2rpx solid $uni-border-color;
 }
 </style>

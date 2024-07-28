@@ -5,9 +5,9 @@
       <announcement />
       <all-tasks style="margin-top: 64rpx" />
       <view class="body-leaderBoard">
-        <LeaderBoard />
-        <LeaderBoard />
-        <LeaderBoard />
+        <ReceiveLeaderboard />
+        <ResponseLeaderboard />
+        <CancelLeaderboard />
       </view>
     </view>
   </view>
@@ -18,14 +18,21 @@ import { defineComponent } from "vue";
 import Top from "./components/Top/index.vue";
 import Announcement from "./components/Announcement/index.vue";
 import AllTasks from "./components/AllTasks/index.vue";
-import LeaderBoard from "./components/Leaderboard/index.vue";
+import ReceiveLeaderboard from "./components/ReceiveLeaderboard/index.vue";
+import ResponseLeaderboard from "./components/ResponseLeaderboard/index.vue";
+import CancelLeaderboard from "./components/CancelLeaderboard/index.vue";
 import Status from "./components/Status/index.vue";
-import store from "@/store";
-import { ActionTypes } from "@/enums/actionTypes";
 import { navigateTo } from "@/utils/helper";
 
 export default defineComponent({
-  components: { Top, Announcement, AllTasks, Status, LeaderBoard },
+  components: {
+    Top,
+    Announcement,
+    AllTasks,
+    ReceiveLeaderboard,
+    ResponseLeaderboard,
+    CancelLeaderboard,
+  },
 
   setup() {
     const gotoMap = () => {

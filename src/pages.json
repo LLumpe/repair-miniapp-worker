@@ -46,6 +46,12 @@
       }
     },
     {
+      "path": "pages/editName/index",
+      "style": {
+        "navigationBarTitleText": "昵称修改"
+      }
+    },
+    {
       "path": "pages/register/index",
       "style": {
         "navigationBarTitleText": "完善个人信息"

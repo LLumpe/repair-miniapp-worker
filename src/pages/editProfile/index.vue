@@ -26,10 +26,10 @@
         </view>
       </u-cell-item>
       <u-cell-item
-        title="姓名"
+        title="昵称"
         :value="userInfo.volunteerInformation.name"
-        :arrow="false"
         hover-class="none"
+        @click="handleNameChange"
       />
       <picker
         :range="sexRange"
@@ -49,24 +49,11 @@
           "
         />
       </picker>
-      <u-cell-item
-        title="生日"
-        :value="birthDay"
-        :arrow="false"
-        hover-class="none"
-      />
-    </u-cell-group>
-    <u-cell-group title=" ">
+
       <u-cell-item
         title="手机号"
         :value="userInfo.phone"
         @click="handleEditPhoneNumber"
-      />
-      <u-cell-item
-        title="身份证号"
-        :value="IDCardWithoutLastFour"
-        :arrow="false"
-        hover-class="none"
       />
     </u-cell-group>
     <u-cell-group title=" ">
@@ -89,10 +76,6 @@
       >
         <u-cell-item title="常居地" :value="address" />
       </picker>
-      <!-- <u-cell-item
-        title="个人简介"
-        value="新版本"
-      /> -->
     </u-cell-group>
     <u-cell-group title=" ">
       <view class="quit" @click="handleLogout"> 退出登录 </view>
@@ -145,19 +128,6 @@ const useShowInfo = () => {
     return dayjs(time).fromNow(true);
   });
 
-  const birthDay = computed(() => {
-    const IDCard: string = userInfo?.value?.volunteerInformation?.idcard;
-
-    return (
-      IDCard &&
-      IDCard.substring(6, 10) +
-        "-" +
-        IDCard.substring(10, 12) +
-        "-" +
-        IDCard.substring(12, 14)
-    );
-  });
-
   const IDCardWithoutLastFour = computed(() => {
     const IDCard: string = userInfo?.value?.volunteerInformation?.idcard;
 
@@ -185,7 +155,6 @@ const useShowInfo = () => {
   return {
     userInfo,
     registerTimeFromNow,
-    birthDay,
     IDCardWithoutLastFour,
     address,
     addressArray,
@@ -203,7 +172,6 @@ const useEditSex = () => {
       name: "女",
     },
   ];
-
   const handleSexPickerChange = async (e: any) => {
     const index = parseInt(e.detail.value, 10);
     const sex = sexRange[index].id;
@@ -212,6 +180,22 @@ const useEditSex = () => {
   };
 
   return { sexRange, handleSexPickerChange };
+};
+
+const getDate = (type?: any) => {
+  const date = new Date();
+  let year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+
+  if (type === "start") {
+    year = year - 60;
+  } else if (type === "end") {
+    year = year + 2;
+  }
+  month = (month > 9 ? month : "0" + month) as number;
+  day = (day > 9 ? day : "0" + day) as number;
+  return `${year}-${month}-${day}`;
 };
 
 const useEditAddress = () => {
@@ -223,7 +207,6 @@ const useEditAddress = () => {
       district: arr[2],
     });
   };
-
   return { handleAddressPickerChange };
 };
 
@@ -240,6 +223,10 @@ const useEditAvatar = () => {
   };
 
   return { handleChooseAvatar };
+};
+
+const handleNameChange = () => {
+  navigateTo("/pages/editName/index");
 };
 
 const uploadAvatar = async (path: string) => {
@@ -269,6 +256,7 @@ const handleAvatarChange = (path: any) => {
 export default defineComponent({
   components: { UCellGroup, UCellItem },
   setup() {
+    const date = getDate();
     const handleEditPhoneNumber = () => {
       navigateTo("/pages/editPhoneNumber/index");
     };
@@ -276,7 +264,17 @@ export default defineComponent({
       navigateBack();
       authService.logout();
     };
+    const startDate = computed(() => {
+      return getDate("start");
+    });
+    const endDate = computed(() => {
+      return getDate("end");
+    });
     return {
+      date,
+      startDate,
+      endDate,
+      handleNameChange,
       ...useShowInfo(),
       ...useEditSex(),
       ...useEditAddress(),

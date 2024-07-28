@@ -16,8 +16,11 @@
         <view class="box-detail-info">
           <view class="box-detail-info-user">
             <image
-              src="@/static/images/icon/user.png"
-              style="width: 80rpx; height: 80rpx"
+              :src="
+                orderDetail.familyUser.avatarUrl ||
+                '@/static/images/icon/user.png'
+              "
+              style="width: 80rpx; height: 80rpx; border-radius: 50%"
             />
             <view
               style="
@@ -27,9 +30,11 @@
                 color: #333;
               "
             >
-              <span style="font-size: 30rpx"> {{ orderDetail.name }} </span>
+              <span style="font-size: 30rpx">
+                {{ orderDetail.familyUser.name || "匿名用户" }}
+              </span>
               <span style="font-size: 24rpx; color: #999">{{
-                orderDetail.createdAt
+                orderDetail.createdAt || "N/A"
               }}</span>
             </view>
             <view
@@ -44,9 +49,10 @@
                 style="width: 40rpx; height: 40rpx"
                 class="image"
                 src="@/static/images/repairDetail/phone-call.png"
+                mode="aspectFit"
               />
               <span style="margin-left: 10rpx; font-size: 26rpx; color: #999">{{
-                orderDetail.phone
+                orderDetail.familyUser.phone || "用户暂时没有绑定手机"
               }}</span>
             </view>
           </view>
@@ -76,18 +82,27 @@
           <view class="box-detail-info-item">
             <view class="box-detail-info-item-title">设备名</view>
             <view class="box-detail-info-item-value">{{
-              orderDetail.repairEquipmentContent[repairIndex].equipmentName
+              orderDetail.repairEquipmentContent[repairIndex].equipmentName ||
+              "N/A"
             }}</view>
           </view>
 
           <view class="box-detail-info-item">
             <view class="box-detail-info-item-title">客户描述</view>
             <view class="box-detail-info-item-value">{{
-              orderDetail.repairEquipmentContent[repairIndex].repairDesc
+              orderDetail.repairEquipmentContent[repairIndex].repairDesc ||
+              "N/A"
             }}</view>
           </view>
 
-          <view class="box-detail-info-item">
+          <view
+            v-if="
+              orderDetail.repairEquipmentContent[repairIndex].equipmentImg &&
+              orderDetail.repairEquipmentContent[repairIndex].equipmentImg
+                .length
+            "
+            class="box-detail-info-item"
+          >
             <view class="box-detail-info-item-title">设备照片</view>
             <view class="box-detail-info-item-value">
               <view class="box-detail-info-item-value-image">
@@ -99,28 +114,44 @@
                   :key="index"
                   @click="showImageEvent(item, index)"
                 >
-                  <image :src="item" />
+                  <image :src="item" mode="aspectFit" />
                 </view>
               </view>
+            </view>
+          </view>
+
+          <view
+            v-if="
+              !orderDetail.repairEquipmentContent[repairIndex].equipmentImg ||
+              !orderDetail.repairEquipmentContent[repairIndex].equipmentImg
+                .length
+            "
+            class="box-detail-info-item"
+          >
+            <view class="box-detail-info-item-title">设备照片</view>
+            <view class="box-detail-info-item-value">
+              暂无待维修设备图片，请联系用户确认
             </view>
           </view>
 
           <view class="box-detail-info-item">
             <view class="box-detail-info-item-title">期待维修日期</view>
             <view class="box-detail-info-item-value">{{
-              orderDetail.expectDate
+              orderDetail.expectDate || "N/A"
             }}</view>
           </view>
           <view class="box-detail-info-item">
             <view class="box-detail-info-item-title">维修地址</view>
             <view class="box-detail-info-item-value">{{
-              `${orderDetail.province} - ${orderDetail.city} - ${orderDetail.district}`
+              `${orderDetail.province || "N/A"} - ${
+                orderDetail.city || "N/A"
+              } - ${orderDetail.district || "N/A"}`
             }}</view>
           </view>
           <view class="box-detail-info-item">
             <view class="box-detail-info-item-title">详细地址</view>
             <view class="box-detail-info-item-value">{{
-              orderDetail.address
+              orderDetail.address || "N/A"
             }}</view>
           </view>
         </view>
@@ -164,7 +195,8 @@
             </view>
 
             <span
-              >{{ orderDetail.phone }} <text class="iconfont icon-arrow-right"
+              >{{ orderDetail.familyUser.phone || "N/A" }}
+              <text class="iconfont icon-arrow-right"
             /></span>
           </view>
         </view>
@@ -268,11 +300,12 @@ export default defineComponent({
       uni.showModal({
         title: "提示",
         content: "是否接单？",
-        success: (result) => {
-          handleTake();
-        },
-        fail(result) {
-          console.log("用户取消了接单");
+        success: function (res) {
+          if (res.confirm) {
+            handleTake();
+          } else if (res.cancel) {
+            console.log("用户取消了接单");
+          }
         },
       });
     };
@@ -385,7 +418,7 @@ export default defineComponent({
             white-space: nowrap; /* 强制文本在一行显示 */
             overflow: hidden; /* 隐藏超出容器的内容 */
             text-overflow: ellipsis; /* 用省略号表示被截断的文本 */
-            font-size: $uni-font-size-base;
+            font-size: 27rpx;
             color: $uni-text-color;
             &-image {
               height: 200rpx;

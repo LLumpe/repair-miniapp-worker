@@ -78,14 +78,14 @@
               <image class="avatar" :src="item.familyUser.avatarUrl" />
               <view class="publisher-info">
                 <view class="name">
-                  {{ item.name }}
+                  {{ item.name || "N/A" }}
                   <view class="header-more" @click="handleClickShowmore(item)">
                     查看更多
                     <text class="iconfont icon-arrow-right" />
                   </view>
                 </view>
                 <span class="address">
-                  {{ item.city }} - {{ item.district }}
+                  {{ item.city || "N/A" }} - {{ item.district || "N/A" }}
                 </span>
               </view>
             </view>
@@ -101,7 +101,7 @@
                   维修地址 :
                 </span>
                 <span class="content-info-item-right">
-                  {{ item.address }}
+                  {{ item.address || "N/A" }}
                 </span>
               </view>
               <view class="content-info-item">
@@ -113,7 +113,7 @@
                   设备数量 :
                 </span>
                 <span class="content-info-item-right">
-                  {{ item.repairEquipmentNumber }} 个
+                  {{ item.repairEquipmentNumber || "N/A" }} 个
                 </span>
               </view>
               <view class="content-info-item">
@@ -125,7 +125,7 @@
                   预期维修时间 :
                 </span>
                 <span class="content-info-item-right">
-                  {{ item.expectDate }}
+                  {{ item.expectDate || "N/A" }}
                 </span>
               </view>
             </view>
@@ -147,9 +147,6 @@ import { repairOrder } from "@/api/types/models";
 import mapSettings from "@/config/map";
 import UMap from "@/components/UMap/index.vue";
 // import Item from "./components/Item/index.vue";
-import store from "@/store";
-import DropDown from "@/components/DropDown/index.vue";
-import { ActionTypes } from "@/enums/actionTypes";
 import { useStore } from "vuex";
 import Empty from "@/components/Empty/index.vue";
 import { useLocation } from "@/uses/useLocation";
@@ -161,16 +158,8 @@ import {
   showLoading,
   showToast,
 } from "@/utils/helper";
-import {
-  computed,
-  ComputedRef,
-  defineComponent,
-  reactive,
-  onMounted,
-  onActivated,
-  Ref,
-  ref,
-} from "vue";
+import { computed, defineComponent, reactive, Ref, ref } from "vue";
+import authService from "@/service/authService";
 //维修订单详情
 const repairOrderInfo: Ref<repairOrder[] | []> = ref([]);
 //当前位置
@@ -232,7 +221,7 @@ const getRepairOrder = (params: any) => {
               width: 30,
               height: 30,
               callout: {
-                content: "绿的翡翠国际广场",
+                content: item.address,
                 color: "#fff",
                 fontSize: 10,
                 borderRadius: 4,
@@ -243,6 +232,8 @@ const getRepairOrder = (params: any) => {
               },
             });
           });
+        console.log("orderMarkers", orderMarkers);
+
         repairOrderMarkers.value = orderMarkers;
       }
     } catch (e) {
@@ -283,12 +274,13 @@ export default defineComponent({
       uni.showModal({
         title: "提示",
         content: "确定要接单吗？",
-        success: (result) => {
-          console.log("用户接单");
-          handleTakeOrder(item);
-        },
-        fail: () => {
-          console.log("取消了接单");
+        success: (res: any) => {
+          if (res.confirm) {
+            console.log("用户接单");
+            handleTakeOrder(item);
+          } else {
+            console.log("取消了接单");
+          }
         },
       });
     };
@@ -357,12 +349,21 @@ export default defineComponent({
     };
   },
   onShow() {
+    const store = useStore();
+    const logged = store.getters.logged;
+    if (logged) {
+      getRepairOrder({});
+      getLocation();
+    } else {
+      showToast("您还未登录，请先登录");
+      authService.login();
+    }
     // store.dispatch(ActionTypes.getMyUncheckedMissions);
     // store.dispatch(ActionTypes.getMyMissions);
     //获取维修订单
-    getRepairOrder({});
+
     //每次页面出现重新获取位置
-    getLocation();
+
     // store.dispatch(ActionTypes.getRepairOrders);
   },
 });
@@ -408,7 +409,6 @@ export default defineComponent({
 
 .list {
   border-radius: 20rpx;
-  height: 1200rpx;
   z-index: 1;
   .top {
     width: 100%;
@@ -468,19 +468,17 @@ export default defineComponent({
   }
   &-box {
     width: 100%;
-    height: 1200rpx;
-    padding-top: 20rpx;
+    padding: 10rpx 0 30rpx 0;
   }
   &-item {
-    margin: 0 auto 30rpx auto;
+    margin: 20rpx auto 0 auto;
     box-sizing: border-box;
     width: 700rpx;
-    // height: 300rpx;
     background-color: #ffffff;
     border: 1rpx solid#D8D8D8;
     border-radius: 10rpx;
     transition: 0.3s all;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
     &:active {
       background-color: rgba(85, 85, 85, 0.1);
     }
@@ -506,8 +504,8 @@ export default defineComponent({
         width: 100%;
         padding: 10rpx;
         .avatar {
-          width: 100rpx;
-          height: 100rpx;
+          width: 90rpx;
+          height: 90rpx;
           border-radius: 50%;
         }
         .publisher-info {

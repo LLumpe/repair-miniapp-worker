@@ -1,10 +1,14 @@
 <template>
   <view class="leaderBoardList">
     <view class="list">
-      <view v-if="!data || !data.length" class="empty">
+      <view v-if="!leaderboardType || !leaderboardType.length" class="empty">
         <LeaderBoardListEmpty message="本月暂无排行榜~" />
       </view>
-      <view class="item" v-for="(item, index) in data" :key="item.id">
+      <view
+        class="item"
+        v-for="(item, index) in leaderboardType"
+        :key="item.id"
+      >
         <view class="item-top">
           <view class="item-top-image">
             <image
@@ -28,15 +32,83 @@
           </view>
           <view class="item-top-info">
             <view class="item-top-info-avatar">
-              <image src="@/static/images/icon/user.png"></image>
+              <image :src="item.avatarUrl || '@/static/images/icon/user.png'" />
             </view>
             <view class="item-top-info-name">
               <span>{{ item.name }}</span>
-              <view>
-                <span class="item-top-info-name-number">接单数</span>
-                <text class="item-top-info-name-order">
-                  {{ item.star }}
-                </text>
+              <view v-if="type === 1">
+                <span class="item-top-info-name-number">完成订单量</span>
+                <view
+                  style="
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                  "
+                >
+                  <text
+                    class="item-top-info-name-order"
+                    style="font-size: 60rpx"
+                  >
+                    {{ item.receiveNumber === null ? "-" : item.receiveNumber }}
+                  </text>
+                  <span
+                    v-if="item.receiveNumber != null"
+                    style="font-size: 20rpx; color: gray"
+                    >单</span
+                  >
+                </view>
+              </view>
+              <view v-if="type === 2">
+                <span class="item-top-info-name-number">平均响应时间</span>
+                <view
+                  style="
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                  "
+                >
+                  <text
+                    class="item-top-info-name-order"
+                    style="font-size: 60rpx"
+                  >
+                    {{
+                      item.responseDuration === null
+                        ? "-"
+                        : item.responseDuration
+                    }}
+                  </text>
+                  <span
+                    v-if="item.responseDuration != null"
+                    style="font-size: 20rpx; color: gray"
+                    >分钟</span
+                  >
+                </view>
+              </view>
+              <view v-if="type === 3">
+                <span class="item-top-info-name-number">退单返修率</span>
+                <view
+                  style="
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                  "
+                >
+                  <text
+                    class="item-top-info-name-order"
+                    style="font-size: 60rpx"
+                  >
+                    {{
+                      item.cancelRate == null
+                        ? "-"
+                        : `${(item.cancelRate * 100).toFixed(1)}`
+                    }}
+                  </text>
+                  <span
+                    v-if="item.cancelRate != null"
+                    style="font-size: 20rpx; color: gray"
+                    >%</span
+                  >
+                </view>
               </view>
             </view>
           </view>
@@ -47,48 +119,43 @@
   </view>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import LeaderBoardListEmpty from "../Empty/index.vue";
+import store from "@/store";
 export default defineComponent({
   name: "LeaderBoardList",
   components: { LeaderBoardListEmpty },
-  setup() {
-    const data = [
-      {
-        id: 1,
-        name: "赵师傅",
-        phone: "152xxxxxxxx",
-        province: "天津区",
-        city: "天津市",
-        star: 20,
-      },
-      {
-        id: 2,
-        name: "杨师傅",
-        phone: "152xxxxxxxx",
-        province: "湖南省",
-        city: "长沙市",
-        star: 15,
-      },
-      {
-        id: 3,
-        name: "段师傅",
-        phone: "152xxxxxxxx",
-        province: "北京市",
-        city: "北京市",
-        star: 11,
-      },
-      {
-        id: 4,
-        name: "周师傅",
-        phone: "152xxxxxxxx",
-        province: "上海市",
-        city: "上海市",
-        star: 10,
-      },
-    ];
+  props: {
+    type: {
+      type: Number,
+      default: 1,
+    },
+  },
+  setup(props) {
+    console.log("list props", props.type);
+    let leaderboardType;
+    const leaderboard = computed(() => {
+      return store.getters.leaderboard;
+    });
+    console.log("leaderboard", leaderboard);
+
+    if (props.type === 1) {
+      leaderboardType = computed(() => {
+        return store.getters.leaderboardReceive;
+      });
+    }
+    if (props.type === 2) {
+      leaderboardType = computed(() => {
+        return store.getters.leaderboardResponse;
+      });
+    }
+    if (props.type === 3) {
+      leaderboardType = computed(() => {
+        return store.getters.leaderboardCancel;
+      });
+    }
     return {
-      data,
+      leaderboardType,
     };
   },
 });
@@ -186,7 +253,7 @@ export default defineComponent({
               color: gray;
               border-top-right-radius: 20rpx;
               border-bottom-left-radius: 50rpx;
-              width: 130rpx;
+              width: 150rpx;
               text-align: center;
               font-size: $uni-font-size-xs;
             }

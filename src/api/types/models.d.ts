@@ -125,7 +125,7 @@ export interface Case {
   // 志愿者-案件信息
   volunteerCase?: VolunteerCase;
   // 志愿者ID
-  volunteerId?: number|null;
+  volunteerId?: number | null;
 }
 
 export interface ConfirmResult {
@@ -469,77 +469,77 @@ export interface repairOrder {
   // 关联表ID
   id?: number;
   //用户ID
-  userId?: number|null;
+  userId?: number | null;
   //维修订单名称
-  name?: string|null;
+  name?: string | null;
   //用户电话
-  phone?: string|null;
+  phone?: string | null;
   //维修地区-省
-  province?: string|null;
+  province?: string | null;
   //维修地区-城市
-  city?: string|null;
+  city?: string | null;
   //维修地区-地区
-  district?: string|null;
+  district?: string | null;
   //维修地区-详细地址
-  address?: string|null;
+  address?: string | null;
   //维修地区-经度
-  latitude?: number|null;
+  latitude?: number | null;
   //维修地区-维度
-  longitude?: number|null;
+  longitude?: number | null;
   //维修详情
-  repairEquipmentContent?:Array<repairDetail> |null;
+  repairEquipmentContent?: Array<repairDetail> | null;
   //维修数量
-  repairEquipmentNumber?: number|null;
+  repairEquipmentNumber?: number | null;
   //期望维修日期
-  expectDate?: string|null;
-  expectVolunteerId?: number|null;
-  volunteerId?: number|null;
-  orderType?: number|null;
-  cancelNumber?: number|null;
-  creatorType?: number|null;
-  state?: number|null;
-  createdAt?: string|null;
-  checkAt?: string|null;
-  receiveAt?: string|null;
-  finishAt?: string|null;
-  confirmAt?: string|null;
-  cancelAt?: string|null;
-  updatedAt?: string|null;
-  createTime?:string|null;
-  familyUser?: familyUser|null;
-  startAt?: string|null;
-  endAt?: string|null;
-  orderColumn?: string|null;
-  orderWay?: string|null;
+  expectDate?: string | null;
+  expectVolunteerId?: number | null;
+  volunteerId?: number | null;
+  orderType?: number | null;
+  cancelNumber?: number | null;
+  creatorType?: number | null;
+  state?: number | null;
+  createdAt?: string | null;
+  checkAt?: string | null;
+  receiveAt?: string | null;
+  finishAt?: string | null;
+  confirmAt?: string | null;
+  cancelAt?: string | null;
+  updatedAt?: string | null;
+  createTime?: string | null;
+  familyUser?: familyUser | null;
+  startAt?: string | null;
+  endAt?: string | null;
+  orderColumn?: string | null;
+  orderWay?: string | null;
   //距离
-  distance?: string|null;
+  distance?: string | null;
 }
 
 export interface familyUser {
   //用户id
   id?: number;
   //姓名
-  name?: string|null;
+  name?: string | null;
   //电话
-  phone?: string|null;
+  phone?: string | null;
   //性别
-  sex?: number|null;
+  sex?: number | null;
   //昵称
-  nickName?: string|null;
+  nickName?: string | null;
   //用户头像
-  avatarUrl?: string|null;
+  avatarUrl?: string | null;
   //用户国家
-  country?: string|null;
+  country?: string | null;
   //省
-  province?: string|null;
+  province?: string | null;
   //城市
-  city?: string|null;
+  city?: string | null;
   //地区
-  district?: string|null;
+  district?: string | null;
   //状态
-  state?: number|null;
+  state?: number | null;
   //注册时间
-  registerTime?: string|null;
+  registerTime?: string | null;
 }
 
 export interface repairDetail {
@@ -549,4 +549,16 @@ export interface repairDetail {
   repairDesc?: string;
   //上传照片
   equipmentImg?: string[];
+}
+export interface Leaderboard {
+  id?: number;
+  volunteerId?: number;
+  name?: string;
+  phone?: string;
+  avatarUrl?: string;
+  receiveNumber?: number;
+  backNumber?: number;
+  againNumber?: number;
+  responseDuration?: number;
+  cancelRate?: number;
 }

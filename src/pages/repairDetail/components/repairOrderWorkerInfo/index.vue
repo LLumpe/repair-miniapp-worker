@@ -18,6 +18,9 @@
             <span style="font-size: 30rpx">
               {{ orderDetail.volunteerInformation.name || "N/A" }}
             </span>
+            <span style="font-size: 24rpx; margin-left: 10rpx; color: gray">
+              {{ orderDetail.volunteerInformation.name ? "师傅" : "" }}
+            </span>
           </view>
           <view
             style="
@@ -33,11 +36,12 @@
               class="image"
               src="@/static/images/repairDetail/phone-call.png"
             />
-            <span style="margin-left: 10rpx; font-size: 26rpx; color: #999">{{
-              orderDetail.volunteer.phone || "N/A"
-            }}</span>
+            <span style="margin-left: 10rpx; font-size: 26rpx; color: #999">
+              {{ orderDetail.volunteer.phone || "N/A" }}
+            </span>
           </view>
         </view>
+        <view class="box-divide" />
         <view v-if="orderDetail.state !== 2" class="box-info-item">
           <view class="box-info-item-label">维修描述</view>
           <view class="box-info-item-value">{{
@@ -234,12 +238,13 @@ export default defineComponent({
 
 .repairOrderItem {
   width: 100%;
+  margin: 0 0 0 0;
   background-color: #ffffff;
   border-radius: 20rpx;
-
   .box {
     width: 100%;
     border-radius: 15rpx;
+    padding: 0rpx 30rpx 30rpx 30rpx;
     &-info {
       width: 100%;
       height: fit-content;
@@ -256,7 +261,6 @@ export default defineComponent({
         margin-top: 20rpx;
         width: 100%;
         @include flex;
-        margin-left: 20rpx;
         &-label {
           width: 180rpx;
           font-size: $uni-font-size-sm;
@@ -275,7 +279,6 @@ export default defineComponent({
           color: $uni-text-color;
 
           &-image {
-            height: 200rpx;
             margin-right: 30rpx;
             text-align: center;
             align-items: center;
@@ -286,18 +289,14 @@ export default defineComponent({
               border-radius: 20rpx;
               border: 1rpx solid gainsboro;
               margin-right: 20rpx;
-
               &:active {
                 border: 1rpx solid rgba(124, 124, 124, 0.7);
               }
-
               image {
-                width: 160rpx;
-                height: 160rpx;
-                border-radius: 20rpx;
-                object-fit: contain;
+                width: 120rpx;
+                height: 120rpx;
+                border-radius: 10rpx;
               }
-
               span {
                 font-size: $uni-font-size-sm;
               }

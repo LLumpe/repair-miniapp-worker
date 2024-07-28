@@ -123,11 +123,6 @@ export default defineComponent({
         try {
           await smsVerify.verifyPhone();
           step.value = 2;
-        } catch (e) {
-          console.log(e);
-        }
-      } else if (step.value === 2) {
-        try {
           await profileVerify.verifyProfile(userInfo);
           showToast("验证成功", "success");
           await authService.getUserInfo();

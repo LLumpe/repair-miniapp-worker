@@ -28,7 +28,7 @@
             </view>
             <view class="second-text">
               <view class="abstract-text">
-                {{ item.description }}
+                {{ item.comment }}
               </view>
             </view>
           </swiper-item>

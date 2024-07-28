@@ -3,17 +3,20 @@
     <view class="box">
       <view class="box-title">
         <view>
-          <h1>{{ orderLabel[currentRepairOrder.state].title }}</h1>
-          <h2>{{ orderLabel[currentRepairOrder.state].content }}</h2>
+          <view style="display: flex; flex-direction: row">
+            <h1 style="margin-right: 15rpx">
+              {{ orderLabel[currentRepairOrder.state].title }}
+            </h1>
+            <ULoadMore v-if="isLoading" status="loading" iconSize="20" />
+          </view>
+          <h3>{{ orderLabel[currentRepairOrder.state].content }}</h3>
         </view>
         <view class="box-image">
           <image src="@/static/images/repairDetail/repairMan.png" />
         </view>
       </view>
       <view class="box-orderId">
-        <span class="box-orderId-content">
-          订单号：1020240706143145142099
-        </span>
+        <span class="box-orderId-content"> 订单号：{{ orderNumber }} </span>
         <view style="color: #09c46e" @click="handleCopyRepairId">复制</view>
       </view>
       <view class="box-order">
@@ -23,7 +26,7 @@
             <view class="box-order-steps-item">
               <USteps
                 :options="stepList"
-                :active="currentRepairOrder.state"
+                :active="activeIndex"
                 active-color="#09C46E"
               />
             </view>
@@ -40,7 +43,7 @@
         <view class="box-order-title">
           {{ currentRepairOrder.state === 2 ? "接单师傅：" : "维修记录：" }}
         </view>
-        <view class="box-order-content" v-if="currentRepairOrder.state !== 2">
+        <view class="box-order-content">
           <RepairOrderWorkerInfo :orderDetail="currentRepairOrder" />
         </view>
       </view>
@@ -109,13 +112,12 @@
 </template>
 
 <script lang="ts">
-import { ref, Ref, reactive, defineComponent, onMounted } from "vue";
+import { ref, Ref, reactive, defineComponent, onMounted, computed } from "vue";
 import USteps from "@/components/USteps/index.vue";
 import RepairOrderDetailInfo from "./components/repairOrderDetailInfo/index.vue";
 import RepairOrderWorkerInfo from "./components/repairOrderWorkerInfo/index.vue";
-import UCollapse from "@/components/UCollapse/index.vue";
-import UCollapseItem from "@/components/UCollapseItem/index.vue";
 import UPopup from "@/components/UPopup/index.vue";
+import ULoadMore from "@/components/ULoadMore/index.vue";
 import {
   hideLoading,
   navigateTo,
@@ -140,14 +142,6 @@ const orderLabel = {
     title: "已完成",
     content: "订单已经完成，祝您生活愉快~",
   },
-  // "-1": {
-  //   title: "已取消",
-  //   content: "订单已取消，祝您生活愉快~",
-  // },
-  // "-2": {
-  //   title: "审核不通过",
-  //   content: "订单售后审核被驳回，请您咨询客户或重新提交~",
-  // },
   "-3": {
     title: "退单申请中",
     content: "订单退单申请中，请您耐心等待~",
@@ -177,6 +171,8 @@ const orderLabel = {
 const showMessage = ref(false);
 //定时关闭
 let timeout = ref<number | null>(null);
+//steps所在的当前状态
+const activeIndex = ref(0);
 //设置关闭秒数
 const count = ref<number>(7);
 //显示关闭
@@ -198,6 +194,7 @@ export default defineComponent({
     RepairOrderDetailInfo,
     UPopup,
     RepairOrderWorkerInfo,
+    ULoadMore,
   },
   props: {
     repairOrder: {
@@ -206,7 +203,14 @@ export default defineComponent({
     },
   },
 
-  setup() {
+  setup(props) {
+    const isLoading = computed(() => {
+      return [2, 3, -3, -6].includes(JSON.parse(props.repairOrder).state);
+    });
+    //订单号
+    const orderNumber = computed(() => {
+      return JSON.parse(props.repairOrder).orderNumber || "N/A";
+    });
     const handleCopyRepairId = () => {
       showToast("复制成功", "success");
     };
@@ -264,6 +268,9 @@ export default defineComponent({
       }, 1000);
     };
     return {
+      activeIndex,
+      orderNumber,
+      isLoading,
       repairLabel,
       currentRepairOrder,
       handleCopyRepairId,
@@ -295,11 +302,14 @@ export default defineComponent({
       console.log("newRepairOrder", newRepairOrder);
       if (newRepairOrder.orderFlowList) {
         const tempList: Array<object> = [];
-        newRepairOrder.orderFlowList.map((item: any) => {
+        newRepairOrder.orderFlowList.map((item: any, index: number) => {
           tempList.push({
             title: item.desc,
             desc: item.time || "N/A",
           });
+          if (item.finish) {
+            activeIndex.value = index + 1;
+          }
         });
         stepList.value = tempList;
       }
@@ -327,15 +337,19 @@ export default defineComponent({
 .repairDetail {
   .box {
     width: 100vw;
-    padding: 40rpx;
+    padding: 30rpx;
     box-sizing: border-box;
     border-radius: 15rpx;
     &-title {
       @include flex(row);
       height: 170rpx;
-      justify-content: space-around;
+      padding: 0 10rpx;
+      box-sizing: border-box;
+      justify-content: space-between;
+      align-items: center;
       h1 {
         font-size: $uni-font-size-xxl;
+        margin-bottom: 10rpx;
       }
       h2 {
         font-size: $uni-font-size-lg;
@@ -396,7 +410,7 @@ export default defineComponent({
       @include flex(column);
       border-radius: 20rpx;
       box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
-      margin-top: 35rpx;
+      margin-top: 30rpx;
       background-color: #ffffff;
       display: flex;
       &-title {
@@ -405,13 +419,14 @@ export default defineComponent({
         padding: 30rpx 0 20rpx 30rpx;
       }
       &-steps {
-        width: 625rpx;
-        overflow: auto;
-        margin: 20rpx auto 0 auto;
+        margin: 0 auto;
+        width: 630rpx;
+        overflow-x: auto;
+        overflow-y: hidden;
         -webkit-overflow-scrolling: touch; /* 在 iOS 上启用惯性滚动 */
         &-item {
-          width: 1000rpx;
-          height: 140rpx;
+          width: 1200rpx;
+          margin: 0 0 30rpx 0;
         }
       }
     }
@@ -487,6 +502,6 @@ export default defineComponent({
   }
 }
 .box-order-steps::-webkit-scrollbar {
-  width: 200rpx; /* 滚动条的宽度 */
+  height: 0rpx; /* 滚动条的宽度 */
 }
 </style>

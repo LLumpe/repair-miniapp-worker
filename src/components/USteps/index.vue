@@ -85,7 +85,8 @@
             ]"
             v-if="index === active"
           >
-            <uni-icons :color="activeColor" :type="activeIcon" size="14" />
+            <!-- <uni-icons :color="activeColor" :type="activeIcon" size="14" /> -->
+            <ULoadMore icon-size="14" status="loading" />
           </view>
           <view
             v-else
@@ -134,9 +135,10 @@
  * @property {String} activeColor 选中状态的颜色
  * @property {Array} options 数据源，格式为：[{title:'xxx',desc:'xxx'},{title:'xxx',desc:'xxx'}]
  */
-
+import ULoadMore from "@/components/ULoadMore/index.vue";
 export default {
   name: "USteps",
+  components: { ULoadMore },
   props: {
     direction: {
       // 排列方向 row column
