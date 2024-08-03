@@ -1,3 +1,13 @@
+<!--
+ * @Author: LLumpe LLumpe@163.com
+ * @Date: 2024-07-25 16:30:33
+ * @LastEditors: LLumpe LLumpe@163.com
+ * @LastEditTime: 2024-07-29 13:54:41
+ * @FilePath: \repair-miniapp-worker\src\pages\editName\index.vue
+ * @Description: 
+ * 
+ * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
+-->
 <template>
   <view class="editName">
     <u-cell-group>
@@ -34,11 +44,16 @@ const editUserInfo = async (params: VolunteerInformation) => {
 export default defineComponent({
   name: "EditName",
   components: { UCellGroup, UCellItem },
-  setup() {
+  props: {
+    name: { type: String, default: "" },
+  },
+  setup(props) {
     const useEditName = () => {
-      const name = ref<string>("");
+      const name = computed(() => {
+        return props.name;
+      });
       const handleEditName = async () => {
-        await editUserInfo({ name: name.value });
+        await editUserInfo({ volunteer: { nickName: name.value } });
       };
       return { name, handleEditName };
     };

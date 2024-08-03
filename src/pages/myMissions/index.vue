@@ -75,7 +75,16 @@
         <view v-for="item in repairOrderInfo" :key="item.id" class="list-item">
           <view class="header">
             <view class="header-publisher">
-              <image class="avatar" :src="item.familyUser.avatarUrl" />
+              <image
+                v-if="item.familyUser.avatarUrl"
+                class="avatar"
+                :src="item.familyUser.avatarUrl"
+              />
+              <image
+                v-if="!item.familyUser.avatarUrl"
+                class="avatar"
+                src="@/static/images/icon/user.png"
+              />
               <view class="publisher-info">
                 <view class="name">
                   {{ item.name || "N/A" }}
@@ -511,7 +520,7 @@ export default defineComponent({
         .publisher-info {
           display: flex;
           flex: 1;
-          height: 100rpx;
+          width: 100%;
           flex-direction: column;
           justify-content: space-around;
           margin-left: 20rpx;
@@ -524,12 +533,12 @@ export default defineComponent({
             font-size: $uni-font-size-lg;
           }
           .address {
-            width: 150rpx;
+            width: fit-content;
             color: #ffffff;
             padding: 5rpx;
             font-size: $uni-font-size-xs;
-            padding-left: 10rpx;
-            padding-right: 10rpx;
+            padding-left: 15rpx;
+            padding-right: 15rpx;
             border-radius: 20rpx;
             background-color: $u-type-func;
           }

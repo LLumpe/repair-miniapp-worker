@@ -18,10 +18,7 @@
 import { defineComponent, computed } from "vue";
 import VolunteerInformationBox from "@/components/VolunteerInformationBox/index.vue";
 import { useStore } from "vuex";
-import authService from "@/service/authService";
 import { useTop } from "@/uses/useTop";
-import { ActionTypes } from "@/enums/actionTypes";
-import store from "@/store";
 
 export default defineComponent({
   components: { VolunteerInformationBox },

@@ -1,3 +1,13 @@
+<!--
+ * @Author: LLumpe LLumpe@163.com
+ * @Date: 2024-07-09 03:18:08
+ * @LastEditors: LLumpe LLumpe@163.com
+ * @LastEditTime: 2024-07-29 14:07:48
+ * @FilePath: \repair-miniapp-worker\src\components\VolunteerInformationBox\index.vue
+ * @Description: 
+ * 
+ * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
+-->
 <template>
   <view class="information">
     <view class="userBox" @click="handleJump">

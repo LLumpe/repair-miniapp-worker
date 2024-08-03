@@ -15,14 +15,8 @@ import {
 } from "vue";
 import MissionInformationCom from "@/components/MissionInformation/index.vue";
 import { requestGetAllRepairOrderById } from "@/api/repairOrder";
-import { Case } from "@/api/types/models";
-import { requestGetCases } from "@/api/mission";
 import { useStore } from "vuex";
-import UButton from "@/components/UButton/index.vue";
-import { navigateTo, showToast } from "@/utils/helper";
-import { ActionTypes } from "@/enums/actionTypes";
-import UModal from "@/components/UModal/index.vue";
-import DataCheckbox from "@/components/DataCheckbox/index.vue";
+import { showToast } from "@/utils/helper";
 import { repairOrder } from "@/api/types/models";
 // const caseInfo: Ref<Case | null> = ref({});
 const repairOrderInfo: Ref<repairOrder | {}> = ref({});
@@ -112,7 +106,7 @@ const useTask = () => {
 };
 
 export default defineComponent({
-  components: { MissionInformationCom, UButton, UModal, DataCheckbox },
+  components: { MissionInformationCom },
   setup(props) {
     const store = useStore();
     // 我加入的任务的 id 集合

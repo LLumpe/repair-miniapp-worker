@@ -14,7 +14,14 @@
               {{ item.updatedAt || "N/A" }}
             </span>
             <view class="box-list-item-top-user">
-              <image :src="item.familyUser.avatarUrl" />
+              <image
+                v-if="item.familyUser.avatarUrl"
+                :src="item.familyUser.avatarUrl"
+              />
+              <image
+                v-if="!item.familyUser.avatarUrl"
+                src="@/static/images/icon/user.png"
+              />
               <span style="color: #999">{{ item.name || "N/A" }}</span>
             </view>
           </view>

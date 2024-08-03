@@ -5,7 +5,16 @@
         <u-cell-group>
           <view class="info-user">
             <view class="info-user-box">
-              <image :src="data.familyUser.avatarUrl" class="avatarUrl"></image>
+              <image
+                v-if="data.familyUser.avatarUrl"
+                :src="data.familyUser.avatarUrl"
+                class="avatarUrl"
+              ></image>
+              <image
+                v-if="!data.familyUser.avatarUrl"
+                src="@/static/images/icon/user.png"
+                class="avatarUrl"
+              ></image>
               <view class="info-user-name">
                 <h1>{{ data.familyUser.name || "匿名用户" }}</h1>
                 <span>{{ data.createdAt || "N/A" }}</span>

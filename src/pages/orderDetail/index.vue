@@ -16,10 +16,13 @@
         <view class="box-detail-info">
           <view class="box-detail-info-user">
             <image
-              :src="
-                orderDetail.familyUser.avatarUrl ||
-                '@/static/images/icon/user.png'
-              "
+              v-if="orderDetail.familyUser.avatarUrl"
+              :src="orderDetail.familyUser.avatarUrl"
+              style="width: 80rpx; height: 80rpx; border-radius: 50%"
+            />
+            <image
+              v-if="!orderDetail.familyUser.avatarUrl"
+              src="@/static/images/icon/user.png"
               style="width: 80rpx; height: 80rpx; border-radius: 50%"
             />
             <view
@@ -220,14 +223,26 @@ const showImage: Ref<boolean> = ref(false);
 const showTake: Ref<boolean> = ref(false);
 export default defineComponent({
   components: { USteps, UPopup },
-  setup() {
+  setup(props) {
     //确认订单当前所在步骤
     const active = 1;
     //联系电话弹窗
     const showPhone: Ref<boolean> = ref(false);
     //打开联系电话弹窗事件
     const handleOpenPhoneModal = () => {
-      showPhone.value = true;
+      if (
+        !orderDetail.value.familyUser ||
+        !orderDetail.value.familyUser.phone
+      ) {
+        uni.showModal({
+          title: "提示",
+          content: "用户未绑定手机号",
+          showCancel: false,
+          success: function (res) {},
+        });
+      } else {
+        showPhone.value = true;
+      }
     };
     //电话联系用户
     const handleCallUser = (value: string) => {
@@ -347,6 +362,7 @@ export default defineComponent({
   flex-direction: $direction;
   align-items: center;
 }
+
 .orderDetail {
   .box {
     // background-color: $uni-color-primary;
@@ -360,12 +376,14 @@ export default defineComponent({
       height: 300rpx;
       background-color: #ffffff;
       box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+
       &-title {
         @include flex;
         padding: 40rpx;
         font-weight: 600;
       }
     }
+
     &-notice {
       @include flex;
       width: 100%;
@@ -375,6 +393,7 @@ export default defineComponent({
       margin-top: 20rpx;
       padding: 30rpx;
       box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+
       &-text {
         display: flex;
         flex-direction: column;
@@ -383,6 +402,7 @@ export default defineComponent({
         font-size: $uni-font-size-sm;
       }
     }
+
     &-detail {
       width: 100%;
       margin-top: 20rpx;
@@ -390,56 +410,70 @@ export default defineComponent({
       box-sizing: border-box;
       padding: 30rpx;
       box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+
       &-title {
         font-weight: 600;
       }
+
       &-info {
         width: 100%;
         position: relative;
+
         &-user {
           @include flex;
           margin-top: 20rpx;
           width: 100%;
           height: 100rpx;
         }
+
         &-item {
           margin-top: 20rpx;
           width: 100%;
           // height: 50rpx;
           @include flex;
+
           &-title {
             width: 180rpx;
             font-size: $uni-font-size-sm;
             color: $uni-text-color-grey;
           }
+
           &-value {
             margin-left: 20rpx;
             flex: 1;
-            white-space: nowrap; /* 强制文本在一行显示 */
-            overflow: hidden; /* 隐藏超出容器的内容 */
-            text-overflow: ellipsis; /* 用省略号表示被截断的文本 */
+            white-space: nowrap;
+            /* 强制文本在一行显示 */
+            overflow: hidden;
+            /* 隐藏超出容器的内容 */
+            text-overflow: ellipsis;
+            /* 用省略号表示被截断的文本 */
             font-size: 27rpx;
             color: $uni-text-color;
+
             &-image {
               height: 200rpx;
               margin-right: 30rpx;
               text-align: center;
               align-items: center;
               display: flex;
+
               &-item {
                 display: flex;
                 border-radius: 20rpx;
                 border: 1rpx solid gainsboro;
                 margin-right: 20rpx;
+
                 &:active {
                   border: 1rpx solid rgba(124, 124, 124, 0.7);
                 }
+
                 image {
                   width: 160rpx;
                   height: 160rpx;
                   border-radius: 20rpx;
                   object-fit: contain;
                 }
+
                 span {
                   font-size: $uni-font-size-sm;
                 }
@@ -449,6 +483,7 @@ export default defineComponent({
         }
       }
     }
+
     &-option {
       @include flex;
       justify-content: flex-end;
@@ -459,6 +494,7 @@ export default defineComponent({
       z-index: 1;
       position: fixed;
       bottom: 0;
+
       &-item {
         width: 160rpx;
         text-align: center;
@@ -471,6 +507,7 @@ export default defineComponent({
         border: 1rpx solid $uni-color-primary;
         border-radius: 60rpx;
         transition: 0.2s all;
+
         &:active {
           background-color: $uni-color-primary;
           color: #ffffff;
@@ -479,15 +516,18 @@ export default defineComponent({
     }
   }
 }
+
 .phone {
   width: 100%;
   height: 200rpx;
+
   &-title {
     width: 100%;
     text-align: center;
     font-size: 32rpx;
     margin-top: 20rpx;
   }
+
   &-number {
     width: 100%;
     @include flex;
@@ -496,22 +536,27 @@ export default defineComponent({
     padding: 30rpx;
     border-radius: 20rpx;
     box-sizing: border-box;
+
     &:active {
       background-color: $uni-click-black;
     }
   }
 }
+
 .popup-box {
   width: 600rpx;
   height: 600rpx;
   background-color: rgba(124, 124, 124, 0.2);
+
   &-swiper {
     width: 100%;
     height: 100%;
+
     &-item {
       display: flex;
       // align-items: center;
       justify-content: center;
+
       image {
         width: 100%;
         height: 90%;
@@ -520,10 +565,12 @@ export default defineComponent({
     }
   }
 }
+
 .takeOrder {
   width: 600rpx;
   position: relative;
   padding-bottom: 100rpx;
+
   &-title {
     display: block;
     text-align: center;
@@ -533,12 +580,14 @@ export default defineComponent({
     color: $uni-color-primary;
     font-weight: 600;
   }
+
   &-button {
     width: 100%;
     display: flex;
     flex-direction: row;
     position: absolute;
     bottom: 0;
+
     button {
       font-size: $uni-font-size-lg;
       width: 50%;

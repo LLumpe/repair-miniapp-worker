@@ -26,10 +26,10 @@
         </view>
       </u-cell-item>
       <u-cell-item
-        title="昵称"
+        title="姓名"
         :value="userInfo.volunteerInformation.name"
+        :arrow="false"
         hover-class="none"
-        @click="handleNameChange"
       />
       <picker
         :range="sexRange"
@@ -102,6 +102,7 @@ import {
 import { VolunteerInformation } from "@/api/types/models";
 import { requestUploadImage } from "@/api/common";
 import bus from "@/utils/bus";
+import store from "@/store";
 
 const editUserInfo = async (params: VolunteerInformation) => {
   showLoading("请稍候");
@@ -226,7 +227,9 @@ const useEditAvatar = () => {
 };
 
 const handleNameChange = () => {
-  navigateTo("/pages/editName/index");
+  navigateTo("/pages/editName/index", {
+    name: store.getters.userInfo.volunteerInformation.name,
+  });
 };
 
 const uploadAvatar = async (path: string) => {
@@ -255,7 +258,18 @@ const handleAvatarChange = (path: any) => {
 
 export default defineComponent({
   components: { UCellGroup, UCellItem },
-  setup() {
+  props: {
+    name: {
+      type: String,
+      default: "",
+    },
+  },
+  setup(props) {
+    const name = computed(() => {
+      return props.name;
+    });
+    console.log("name", name);
+
     const date = getDate();
     const handleEditPhoneNumber = () => {
       navigateTo("/pages/editPhoneNumber/index");

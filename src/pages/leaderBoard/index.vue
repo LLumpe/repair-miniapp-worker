@@ -10,7 +10,16 @@
             <span>{{ year }}</span>
           </view>
           <view class="title-left-content">
-            <span>接单排行榜</span>
+            <span style="font-size: 90rpx">{{ message }}</span>
+            <span
+              style="
+                font-family: 'alimama VF Regular';
+                font-size: 50rpx;
+                font-style: oblique;
+              "
+            >
+              排行榜
+            </span>
           </view>
           <view class="title-left-notice">
             <span class="title-left-notice-text">
@@ -97,62 +106,78 @@ export default defineComponent({
     #ffffff,
     #c1e1d2
   );
+
   .leaderBoard {
     width: 100%;
+
     .title {
       display: flex;
       flex-direction: row;
       box-sizing: border-box;
-      padding: 20rpx;
+      padding: 10rpx 0 20rpx 20rpx;
+
       &-left {
         margin-top: 140rpx;
         z-index: 2;
+
         &-back {
           display: inline-block;
           transform: rotate(180deg);
           color: #ffffff;
+
           text {
             &:active {
               cursor: pointer;
             }
+
             position: fixed;
             top: 50rpx;
             left: -50rpx;
             font-size: 70rpx;
           }
         }
+
         &-time {
           margin-left: 20rpx;
           color: #ffffff;
           font-size: 60rpx;
           font-style: oblique;
         }
+
         &-content {
-          font-family: "alimama VF Regular";
+          // font-family: "alimama VF Regular";
           color: #ffffff;
-          font-size: 130rpx;
+          font-size: 80rpx;
         }
+
         &-notice {
-          margin-top: 10rpx;
+          margin-top: 20rpx;
           margin-left: 10rpx;
+
           &-text {
             display: flex;
             align-items: center;
             color: #ffffff;
             font-size: $uni-font-size-sm;
             font-weight: 600;
+
             image {
               width: 30rpx;
               height: 30rpx;
             }
+
             &::before {
-              content: "•"; /* 使用Unicode符号为点 */
-              margin-right: 4px; /* 调整点和文字之间的间距 */
-              color: #e9e9e9; /* 设置点的颜色 */
+              content: "•";
+              /* 使用Unicode符号为点 */
+              margin-right: 4px;
+              /* 调整点和文字之间的间距 */
+              color: #e9e9e9;
+              /* 设置点的颜色 */
             }
           }
         }
       }
+
       &-right {
         position: absolute;
         top: 0rpx;
@@ -160,6 +185,7 @@ export default defineComponent({
         z-index: 0;
       }
     }
+
     .list {
     }
   }

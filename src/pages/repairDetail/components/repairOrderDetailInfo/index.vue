@@ -4,10 +4,13 @@
       <view class="box-info">
         <view class="box-info-user">
           <image
-            :src="
-              orderDetail.familyUser.avatarUrl ||
-              '@/static/images/icon/user.png'
-            "
+            v-if="orderDetail.familyUser.avatarUrl"
+            :src="orderDetail.familyUser.avatarUrl"
+            style="width: 80rpx; height: 80rpx; border-radius: 50%"
+          />
+          <image
+            v-if="!orderDetail.familyUser.avatarUrl"
+            src="@/static/images/icon/user.png"
             style="width: 80rpx; height: 80rpx; border-radius: 50%"
           />
           <view
