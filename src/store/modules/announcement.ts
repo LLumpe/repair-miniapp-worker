@@ -2,7 +2,7 @@
  * @Author: LLumpe LLumpe@163.com
  * @Date: 2024-07-09 03:18:08
  * @LastEditors: LLumpe LLumpe@163.com
- * @LastEditTime: 2024-07-28 22:08:14
+ * @LastEditTime: 2024-08-06 03:52:55
  * @FilePath: \repair-miniapp-worker\src\store\modules\announcement.ts
  * @Description:
  *
@@ -113,7 +113,7 @@ const Announcement: Module<AnnouncementState, RootState> = {
     [ActionTypes.getLeaderboardReceive]: ({ commit }) => {
       return new Promise(async (resolve, reject) => {
         try {
-          const firstDayOfYear = new Date(now.getFullYear(), 0, 1);
+          const firstDayOfYear = new Date(now.getFullYear(), now.getMonth(), 1);
           console.log("今年的第一天:", formatDate(firstDayOfYear));
           const res = await requestGetLeaderboard({
             startAt: formatDate(firstDayOfYear),
@@ -133,7 +133,7 @@ const Announcement: Module<AnnouncementState, RootState> = {
     [ActionTypes.getLeaderboardResponse]: ({ commit }) => {
       return new Promise(async (resolve, reject) => {
         try {
-          const firstDayOfYear = new Date(now.getFullYear(), 0, 1);
+          const firstDayOfYear = new Date(now.getFullYear(), now.getMonth(),, 1);
           console.log("今年的第一天:", formatDate(firstDayOfYear));
           const res = await requestGetLeaderboard({
             startAt: formatDate(firstDayOfYear),
@@ -153,7 +153,7 @@ const Announcement: Module<AnnouncementState, RootState> = {
     [ActionTypes.getLeaderboardCancel]: ({ commit }) => {
       return new Promise(async (resolve, reject) => {
         try {
-          const firstDayOfYear = new Date(now.getFullYear(), 0, 1);
+          const firstDayOfYear = new Date(now.getFullYear(), now.getMonth(),, 1);
           console.log("今年的第一天:", formatDate(firstDayOfYear));
           const res = await requestGetLeaderboard({
             startAt: formatDate(firstDayOfYear),
