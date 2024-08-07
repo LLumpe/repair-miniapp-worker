@@ -175,6 +175,8 @@ const repairOrderInfo: Ref<repairOrder[] | []> = ref([]);
 const currentLocation = reactive({ latitude: 0, longitude: 0 });
 //地图组件标记维修订单点位
 const repairOrderMarkers: Ref<any[] | []> = ref([]);
+//当前获取的页数
+const current: number = ref(1);
 //从vuex获取缓存维修订单信息
 const useTaskList = () => {
   const store = useStore();
@@ -211,6 +213,7 @@ const getLocation = () => {
 const getRepairOrder = (params: any) => {
   return new Promise<void>(async (resolve, reject) => {
     try {
+      showLoading("加载中...");
       const orderMarkers: Array<any> = [];
       const res = await requestGetAllRepairOrder(params);
 
@@ -242,8 +245,8 @@ const getRepairOrder = (params: any) => {
             });
           });
         console.log("orderMarkers", orderMarkers);
-
         repairOrderMarkers.value = orderMarkers;
+        hideLoading();
       }
     } catch (e) {
       console.log(e);
@@ -251,7 +254,6 @@ const getRepairOrder = (params: any) => {
     }
   });
 };
-
 export default defineComponent({
   components: { Empty, UMap },
   setup(props) {
@@ -357,11 +359,20 @@ export default defineComponent({
       repairOrderMarkers,
     };
   },
+  // onReachBottom() {
+  //   console.log("到达底部");
+  //   current.value++;
+  //   const params = {
+  //     current: current.value,
+  //     size: 10,
+  //   };
+  //   getRepairOrder(params);
+  // },
   onShow() {
     const store = useStore();
     const logged = store.getters.logged;
     if (logged) {
-      getRepairOrder({});
+      getRepairOrder(null);
       getLocation();
     } else {
       showToast("您还未登录，请先登录");
@@ -425,6 +436,7 @@ export default defineComponent({
     box-sizing: border-box;
     border-top-left-radius: 20rpx;
     border-top-right-radius: 20rpx;
+    border-top: 3rpx solid#E2E2E3;
     border-bottom: 1rpx solid#E2E2E3;
     .option {
       width: 100%;

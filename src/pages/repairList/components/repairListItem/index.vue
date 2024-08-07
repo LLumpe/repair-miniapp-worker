@@ -6,7 +6,6 @@
           <view class="box-list-item-label">
             <span class="box-list-item-label-text">
               {{ repairLabel[String(item.state)] }}
-              {{ item.orderType === 2 ? "(返修订单)" : "" }}
             </span>
             <text class="iconfont icon-arrow-right box-list-item-label-arrow" />
           </view>
