@@ -37,7 +37,7 @@
             <view class="item-top-info-name">
               <span>{{ item.name }}</span>
               <view v-if="type === 1">
-                <span class="item-top-info-name-number">完成订单量</span>
+                <span class="item-top-info-name-number">完成订单分值</span>
                 <view
                   style="
                     display: flex;
@@ -49,12 +49,12 @@
                     class="item-top-info-name-order"
                     style="font-size: 60rpx"
                   >
-                    {{ item.receiveNumber === null ? "-" : item.receiveNumber }}
+                    {{ item.finishScore === null ? "-" : item.finishScore }}
                   </text>
                   <span
                     v-if="item.receiveNumber != null"
                     style="font-size: 20rpx; color: gray"
-                    >单</span
+                    >分</span
                   >
                 </view>
               </view>

@@ -2,7 +2,7 @@
  * @Author: LLumpe LLumpe@163.com
  * @Date: 2024-07-27 02:37:23
  * @LastEditors: LLumpe LLumpe@163.com
- * @LastEditTime: 2024-07-28 22:16:28
+ * @LastEditTime: 2024-08-08 01:01:07
  * @FilePath: \repair-miniapp-worker\src\pages\index\components\ReceiveLeaderboard\index.vue
  * @Description: 
  * 
@@ -17,7 +17,7 @@
         mode=""
       />
       <view class="text">
-        <h2>完成订单量</h2>
+        <h2>完成订单分值</h2>
       </view>
     </view>
   </view>
@@ -84,7 +84,7 @@ export default defineComponent({
     height: 100%;
     .text {
       text-align: center;
-      @include font(36rpx, #000000, 56rpx);
+      @include font(32rpx, #000000, 56rpx);
     }
   }
 }

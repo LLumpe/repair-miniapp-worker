@@ -2,7 +2,7 @@
  * @Author: LLumpe LLumpe@163.com
  * @Date: 2024-07-27 02:37:20
  * @LastEditors: LLumpe LLumpe@163.com
- * @LastEditTime: 2024-07-28 22:16:09
+ * @LastEditTime: 2024-08-08 01:01:41
  * @FilePath: \repair-miniapp-worker\src\pages\index\components\CancelLeaderboard\index.vue
  * @Description: 
  * 
@@ -85,7 +85,7 @@ export default defineComponent({
     height: 100%;
     .text {
       text-align: center;
-      @include font(36rpx, #000000, 56rpx);
+      @include font(32rpx, #000000, 56rpx);
     }
   }
 }

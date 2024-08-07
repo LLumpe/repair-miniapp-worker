@@ -2,7 +2,7 @@
  * @Author: LLumpe LLumpe@163.com
  * @Date: 2024-07-09 03:18:08
  * @LastEditors: LLumpe LLumpe@163.com
- * @LastEditTime: 2024-08-07 02:29:45
+ * @LastEditTime: 2024-08-08 01:02:22
  * @FilePath: \repair-miniapp-worker\src\store\modules\announcement.ts
  * @Description:
  *
@@ -117,7 +117,7 @@ const Announcement: Module<AnnouncementState, RootState> = {
           console.log("今年的第一天:", formatDate(firstDayOfYear));
           const res = await requestGetLeaderboard({
             startAt: formatDate(firstDayOfYear),
-            orderColumn: "receive_number",
+            orderColumn: "finish_score",
             orderWay: "desc",
           });
           console.log("res", res);

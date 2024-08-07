@@ -52,7 +52,7 @@ import LeaderBoardList from "./components/LeaderBoardList/index.vue";
 import store from "@/store";
 import { ActionTypes } from "@/enums/actionTypes";
 const leaderType = {
-  1: "完成订单量",
+  1: "完成订单分值",
   2: "平均响应时间",
   3: "退单返修率",
 };
