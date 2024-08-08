@@ -83,6 +83,7 @@
                 ? 'uni-steps__column-check'
                 : 'uni-steps__row-check',
             ]"
+            style="margin: 0 auto"
             v-if="index === active"
           >
             <!-- <uni-icons :color="activeColor" :type="activeIcon" size="14" /> -->

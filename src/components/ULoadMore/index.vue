@@ -68,7 +68,7 @@
       <image :src="imgBase64" mode="widthFix"></image>
     </view>
     <!-- #endif -->
-    <text
+    <!-- <text
       v-if="showText"
       class="uni-load-more__text"
       :style="{ color: color }"
@@ -79,7 +79,7 @@
           ? contentrefreshText
           : contentnomoreText
       }}</text
-    >
+    > -->
   </view>
 </template>
 
@@ -203,6 +203,7 @@ export default {
   height: 40px;
   align-items: center;
   justify-content: center;
+  width: fit-content;
 }
 
 .uni-load-more__text {

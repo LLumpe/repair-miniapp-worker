@@ -23,7 +23,7 @@
           </view>
           <view class="title-left-notice">
             <span class="title-left-notice-text">
-              排行结果基于维修师傅本年
+              排行结果基于维修师傅本月
               {{ message }}
               数据实时更新
               <image
