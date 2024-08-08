@@ -2,7 +2,7 @@
  * @Author: LLumpe LLumpe@163.com
  * @Date: 2024-07-09 03:18:08
  * @LastEditors: LLumpe LLumpe@163.com
- * @LastEditTime: 2024-07-29 14:07:48
+ * @LastEditTime: 2024-08-08 19:17:29
  * @FilePath: \repair-miniapp-worker\src\components\VolunteerInformationBox\index.vue
  * @Description: 
  * 
@@ -304,7 +304,7 @@ export default defineComponent({
     }
     &-ws {
       color: #ebebeb;
-      font-size: $uni-font-size-xs;
+      font-size: $uni-font-size-base;
       letter-spacing: 0.5rpx;
     }
   }

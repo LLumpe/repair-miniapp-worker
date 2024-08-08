@@ -35,7 +35,9 @@
               display: flex;
               align-items: center;
             "
-            @click="handleShowUserPhone"
+            @click="
+              handleShowUserPhone(orderDetail.familyUser.phone || undefined)
+            "
           >
             <image
               style="width: 40rpx; height: 40rpx"
@@ -214,6 +216,7 @@ import { ref, Ref, reactive, defineComponent, watch } from "vue";
 import UPopup from "@/components/UPopup/index.vue";
 import jestConfig from "jest.config";
 import mapSettings from "@/config/map";
+import { showToast } from "@/utils/helper";
 const repairIndex: Ref<number> = ref(0);
 const equipmentList: Ref<any> = ref([]);
 const pickIndex: Ref<number> = ref(0);
@@ -285,8 +288,12 @@ export default defineComponent({
       });
     };
     //联系用户事件
-    const handleShowUserPhone = () => {
-      showPhone.value = true;
+    const handleShowUserPhone = (phone: string) => {
+      if (phone != undefined) {
+        showPhone.value = true;
+      } else {
+        showToast("用户未绑定手机号码");
+      }
     };
     const handleCallUser = (value: string) => {
       uni.makePhoneCall({
