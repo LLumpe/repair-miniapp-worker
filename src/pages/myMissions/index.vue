@@ -69,7 +69,7 @@
           marginTop: `calc(${menuTop}px + 250rpx)`,
         }"
       >
-        <empty message="暂时还没有你的任务哦，去任务大厅看看吧～" />
+        <empty message="暂时没有用户发布任务哦～" />
       </view>
       <view class="list-box">
         <view v-for="item in repairOrderInfo" :key="item.id" class="list-item">

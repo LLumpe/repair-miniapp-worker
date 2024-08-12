@@ -71,22 +71,28 @@ export default defineComponent({
       repairImg: [],
     });
     const handleSubmit = async () => {
-      showLoading("提交中");
       let timeout;
-      try {
-        formData.repairImg = JSON.stringify(formData.repairImg);
-        const res = await requestWorkerFinishOrder(formData);
-        if (res.data?.success) {
+      if (!formData.repairDesc) {
+        showToast("请填写维修描述");
+      } else if (JSON.stringify(formData.repairImg) === "[]") {
+        showToast("请上传维修图片");
+      } else {
+        showLoading("提交中");
+        try {
+          formData.repairImg = JSON.stringify(formData.repairImg);
+          const res = await requestWorkerFinishOrder(formData);
+          if (res.data?.success) {
+            hideLoading();
+            showToast("完成订单成功", "success");
+            timeoutRef.value = setTimeout(() => {
+              uni.navigateBack({ delta: 2 });
+            }, 600);
+          }
+        } catch (error) {
+          console.log(error);
           hideLoading();
-          showToast("完成订单成功", "success");
-          timeoutRef.value = setTimeout(() => {
-            uni.navigateBack({ delta: 2 });
-          }, 600);
+          showModalError("上传图片失败");
         }
-      } catch (error) {
-        console.log(error);
-        hideLoading();
-        showModalError("上传图片失败");
       }
     };
     //选择图片

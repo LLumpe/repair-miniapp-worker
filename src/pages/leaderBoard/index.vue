@@ -7,7 +7,7 @@
             <text class="iconfont icon-arrow-right" @click="goback" />
           </view>
           <view class="title-left-time">
-            <span>{{ year }}</span>
+            <span>{{ year }} - {{ month }}</span>
           </view>
           <view class="title-left-content">
             <span style="font-size: 90rpx">{{ message }}</span>
@@ -70,7 +70,10 @@ export default defineComponent({
       return leaderType[props.type];
     });
     /* 获取时间 */
-    const [year, month] = [new Date().getFullYear(), new Date().getMonth() + 1];
+    const [year, month] = [
+      new Date().getFullYear(),
+      String(new Date().getMonth() + 1).padStart(2, "0"),
+    ];
     //返回
     const goback = () => {
       uni.navigateBack({

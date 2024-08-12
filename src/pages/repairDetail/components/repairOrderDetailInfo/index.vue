@@ -115,6 +115,15 @@
           </view>
         </view>
         <view class="box-info-item">
+          <view class="box-info-item-label">维修设备分值</view>
+          <view class="box-info-item-value">
+            {{
+              orderDetail.repairEquipmentContent[repairIndex].score + "分" ||
+              "N/A"
+            }}
+          </view>
+        </view>
+        <view class="box-info-item">
           <view class="box-info-item-label">期待维修日期</view>
           <view class="box-info-item-value">
             {{ orderDetail.expectDate || "N/A" }}

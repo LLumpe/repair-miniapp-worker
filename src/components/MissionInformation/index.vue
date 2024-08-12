@@ -65,7 +65,7 @@
             </view>
           </view>
           <u-cell-item
-            title="待维修"
+            title="设备名称"
             :value="data.repairEquipmentContent[repairIndex].equipmentName"
             :arrow="false"
             hover-class="none"
@@ -73,6 +73,12 @@
           <u-cell-item
             title="客户描述"
             :value="data.repairEquipmentContent[repairIndex].repairDesc"
+            :arrow="false"
+            hover-class="none"
+          />
+          <u-cell-item
+            title="设备维修分值"
+            :value="data.repairEquipmentContent[repairIndex].score + '分'"
             :arrow="false"
             hover-class="none"
           />

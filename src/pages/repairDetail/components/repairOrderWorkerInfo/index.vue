@@ -67,7 +67,7 @@
                 :key="index"
                 @click="showImageEvent(item, index)"
               >
-                <image :src="item" />
+                <image :src="item" mode="aspectFit" />
               </view>
             </view>
             <view v-if="!orderDetail.repairImg && !orderDetail.repairImg.length"

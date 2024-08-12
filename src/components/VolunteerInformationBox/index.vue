@@ -2,7 +2,7 @@
  * @Author: LLumpe LLumpe@163.com
  * @Date: 2024-07-09 03:18:08
  * @LastEditors: LLumpe LLumpe@163.com
- * @LastEditTime: 2024-08-08 19:17:29
+ * @LastEditTime: 2024-08-12 22:32:13
  * @FilePath: \repair-miniapp-worker\src\components\VolunteerInformationBox\index.vue
  * @Description: 
  * 
@@ -373,83 +373,6 @@ export default defineComponent({
       }
     }
   }
-  // .left {
-  //   box-sizing: border-box;
-  //   width: 202rpx;
-  //   padding: 32rpx 32rpx 0 42rpx;
-  //   text-align: center;
-
-  //   .avatar {
-  //     width: 128rpx;
-  //     height: 128rpx;
-  //     border-radius: 100%;
-  //     background-size: cover;
-
-  //     // &--nologin {
-  //     //   background: #666666;
-  //     // }
-  //   }
-
-  //   .tag {
-  //     margin-top: 16rpx;
-  //   }
-  // }
-
-  // .right {
-  //   padding: 52rpx 0 18rpx 0;
-
-  //   .name {
-  //     font-size: $uni-font-size-lg;
-  //     font-weight: $uni-font-weight-bold;
-  //     color: #000000;
-  //     line-height: 44rpx;
-
-  //     .sex-icon {
-  //       display: inline-block;
-  //       margin-left: 10rpx;
-  //       width: 24rpx;
-  //       height: 24rpx;
-  //       background-image: url("@/static/images/profile/man.png");
-  //       background-size: cover;
-
-  //       &-man {
-  //         background-image: url("@/static/images/profile/man.png");
-  //       }
-  //       &-woman {
-  //         background-image: url("@/static/images/profile/woman.png");
-  //       }
-  //     }
-  //   }
-
-  //   .action-btn {
-  //     margin-top: 16rpx;
-  //     padding: 0;
-  //     border-radius: 10rpx;
-  //     border: 2rpx solid #979797;
-  //     color: #000000;
-  //     position: relative;
-  //     display: inline-block;
-  //     background-color: #ffffff;
-
-  //     &-text {
-  //       font-size: 18rpx;
-  //       font-weight: $uni-font-weight-base;
-  //       line-height: 40rpx;
-  //       margin: 0 5rpx 0 15rpx;
-
-  //       .icon-arrow-right {
-  //         vertical-align: middle;
-  //         font-size: 26rpx;
-  //         line-height: 40rpx;
-  //         color: #979797;
-  //       }
-  //     }
-
-  //     &::after {
-  //       border: none;
-  //     }
-  //   }
-  // }
 
   .divider {
     width: 416rpx;
@@ -457,28 +380,8 @@ export default defineComponent({
     background-color: #979797;
     margin: 20rpx 0;
   }
-
-  // .tasks {
-  //   width: 416rpx;
-  //   display: flex;
-
-  //   .task {
-  //     flex-shrink: 1;
-  //     width: 100%;
-
-  //     // &-number {
-  //     //   font-size: 44rpx;
-  //     //   color: #000000;
-  //     //   line-height: 60rpx;
-  //     // }
-  //     &-description {
-  //       font-size: 24rpx;
-  //       color: #000000;
-  //       line-height: 34rpx;
-  //     }
-  //   }
-  // }
 }
+
 .service {
   margin: 0 auto 20rpx auto;
   width: 700rpx;
@@ -511,15 +414,11 @@ export default defineComponent({
   .content {
     width: 100%;
     height: 100%;
-    display: grid;
-    grid-template-rows: repeat(2, auto);
-    grid-template-columns: repeat(4, 1fr);
-    align-items: center;
-    place-items: center;
     overflow: hidden;
-    padding: 10rpx 0;
+    padding: 20rpx;
     &-item {
-      width: 130rpx;
+      float: left;
+      width: 165rpx;
       height: 130rpx;
       display: flex;
       flex-direction: column;

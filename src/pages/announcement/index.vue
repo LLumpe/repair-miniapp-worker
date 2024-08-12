@@ -3,18 +3,22 @@
     <view>
       <view class="name">
         <view style="height: 66rpx">
-          {{ announcement.title }}
+          {{ announcement.title || "暂无公告" }}
         </view>
       </view>
       <view class="time">
         <view style="height: 34rpx">
-          发布于：{{ announcement.createdAt }}
+          发布于：{{ announcement.createdAt || "N/A" }}
         </view>
       </view>
       <view class="divide" />
-      <view class="content">
+      <view class="content" v-if="announcement.content">
         <rich-text style="width: 700rpx" :nodes="announcement.content" />
       </view>
+      <LeaderBoardListEmpty
+        v-if="!announcement.content"
+        message="暂无公告内容"
+      />
     </view>
   </view>
 </template>
@@ -22,6 +26,7 @@
 <script lang="ts">
 import { requestGetAnnouncements } from "@/api/announcement";
 import { showLoading, showToast } from "@/utils/helper";
+import LeaderBoardListEmpty from "../leaderBoard/components/Empty/index.vue";
 import { defineComponent, ref } from "vue";
 export type announcement = {
   id?: number;
@@ -32,6 +37,7 @@ export type announcement = {
   created_at?: string;
 };
 export default defineComponent({
+  components: { LeaderBoardListEmpty },
   props: {
     sceneType: {
       type: String,

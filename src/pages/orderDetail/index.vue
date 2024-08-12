@@ -123,6 +123,14 @@
             </view>
           </view>
 
+          <view class="box-detail-info-item">
+            <view class="box-detail-info-item-title">维修设备分值</view>
+            <view class="box-detail-info-item-value">{{
+              orderDetail.repairEquipmentContent[repairIndex].score + "分" ||
+              "N/A"
+            }}</view>
+          </view>
+
           <view
             v-if="
               !orderDetail.repairEquipmentContent[repairIndex].equipmentImg ||
