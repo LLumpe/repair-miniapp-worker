@@ -16,7 +16,7 @@
                 class="avatarUrl"
               ></image>
               <view class="info-user-name">
-                <h1>{{ data.familyUser.name || "匿名用户" }}</h1>
+                <h1>{{ data.name || "匿名用户" }}</h1>
                 <span>{{ data.createdAt || "N/A" }}</span>
               </view>
             </view>
@@ -25,7 +25,7 @@
                 class="image"
                 src="@/static/images/repairDetail/phone-call.png"
               />
-              {{ data.familyUser.phone || "用户暂未绑定手机号" }}
+              {{ data.phone || "用户暂未绑定手机号" }}
             </view>
           </view>
           <u-cell-item
@@ -78,7 +78,11 @@
           />
           <u-cell-item
             title="设备维修分值"
-            :value="data.repairEquipmentContent[repairIndex].score + '分'"
+            :value="
+              data.repairEquipmentContent[repairIndex].score
+                ? data.repairEquipmentContent[repairIndex].score + '分'
+                : 'N/A'
+            "
             :arrow="false"
             hover-class="none"
           />

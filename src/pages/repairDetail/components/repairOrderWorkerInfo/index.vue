@@ -35,7 +35,11 @@
               display: flex;
               align-items: center;
             "
-            @click="handleShowUserPhone"
+            @click="
+              handleShowUserPhone(
+                orderDetail.volunteerInformation.phone || undefined
+              )
+            "
           >
             <image
               style="width: 40rpx; height: 40rpx"
@@ -43,7 +47,7 @@
               src="@/static/images/repairDetail/phone-call.png"
             />
             <span style="margin-left: 10rpx; font-size: 26rpx; color: #999">
-              {{ orderDetail.volunteer.phone || "N/A" }}
+              {{ orderDetail.volunteerInformation.phone || "N/A" }}
             </span>
           </view>
         </view>
@@ -94,7 +98,7 @@
         <view class="phone-title">联系师傅</view>
         <view
           class="phone-number"
-          @click="handleCallUser(orderDetail.volunteer.phone)"
+          @click="handleCallUser(orderDetail.volunteerInformation.phone)"
         >
           <view style="display: flex; align-items: center">
             <image
@@ -106,7 +110,7 @@
           </view>
 
           <span
-            >{{ orderDetail.volunteer.phone }}
+            >{{ orderDetail.volunteerInformation.phone }}
             <text class="iconfont icon-arrow-right"
           /></span>
         </view>
@@ -147,6 +151,7 @@
 <script lang="ts">
 import { ref, Ref, reactive, defineComponent, watch } from "vue";
 import UPopup from "@/components/UPopup/index.vue";
+import { showToast } from "@/utils/helper";
 const repairIndex: Ref<number> = ref(0);
 const equipmentList: Ref<any> = ref([]);
 const pickIndex: Ref<number> = ref(0);
@@ -205,7 +210,12 @@ export default defineComponent({
       equipmentList.value = equipment;
     };
     //联系用户事件
-    const handleShowUserPhone = () => {
+    const handleShowUserPhone = (phone: string) => {
+      if (phone != undefined) {
+        showPhone.value = true;
+      } else {
+        showToast("师傅未绑定手机号码");
+      }
       showPhone.value = true;
     };
     const handleCallUser = (value: string) => {

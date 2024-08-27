@@ -76,7 +76,7 @@ http.interceptors.response.use(
     if (noInterceptor) {
       return response;
     }
-
+    console.log("response", response);
     const state = response.data.status;
     const message = response.data.message;
 
@@ -142,7 +142,6 @@ http.interceptors.response.use(
         // token 错误
         // 重定向到登录页面
         uni.showModal({
-          title: "错误",
           content: "请重新登录",
           showCancel: false,
           success: () => {

@@ -99,9 +99,11 @@ export default defineComponent({
     const handleImageSelect = async (e: any) => {
       showLoading();
       try {
-        const tempFilePath = e.tempFilePaths[0];
-        const imageUrl = await requestUploadImage(tempFilePath);
-        formData.repairImg.push(imageUrl.data.data as string);
+        const tempFilePath = e.tempFilePaths;
+        for (let i = 0; i < tempFilePath.length; i++) {
+          const imageUrl = await requestUploadImage(tempFilePath[i]);
+          formData.repairImg.push(imageUrl.data.data as string);
+        }
         showToast("加载成功", "success");
         hideLoading();
       } catch (error) {

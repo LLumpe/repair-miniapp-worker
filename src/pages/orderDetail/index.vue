@@ -34,7 +34,7 @@
               "
             >
               <span style="font-size: 30rpx">
-                {{ orderDetail.familyUser.name || "匿名用户" }}
+                {{ orderDetail.name || "匿名用户" }}
               </span>
               <span style="font-size: 24rpx; color: #999">{{
                 orderDetail.createdAt || "N/A"
@@ -55,7 +55,7 @@
                 mode="aspectFit"
               />
               <span style="margin-left: 10rpx; font-size: 26rpx; color: #999">{{
-                orderDetail.familyUser.phone || "用户暂时没有绑定手机"
+                orderDetail.phone || "用户暂时没有绑定手机"
               }}</span>
             </view>
           </view>
@@ -206,7 +206,7 @@
             </view>
 
             <span
-              >{{ orderDetail.familyUser.phone || "N/A" }}
+              >{{ orderDetail.phone || "N/A" }}
               <text class="iconfont icon-arrow-right"
             /></span>
           </view>
@@ -238,10 +238,7 @@ export default defineComponent({
     const showPhone: Ref<boolean> = ref(false);
     //打开联系电话弹窗事件
     const handleOpenPhoneModal = () => {
-      if (
-        !orderDetail.value.familyUser ||
-        !orderDetail.value.familyUser.phone
-      ) {
+      if (!orderDetail.value.phone) {
         uni.showModal({
           title: "提示",
           content: "用户未绑定手机号",

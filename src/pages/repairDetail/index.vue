@@ -212,7 +212,21 @@ export default defineComponent({
       return JSON.parse(props.repairOrder).orderNumber || "N/A";
     });
     const handleCopyRepairId = () => {
-      showToast("复制成功", "success");
+      uni.setClipboardData({
+        data: orderNumber.value,
+        success() {
+          uni.showToast({
+            title: "复制成功",
+            icon: "success",
+          });
+        },
+        fail() {
+          uni.showToast({
+            title: "复制失败",
+            icon: "none",
+          });
+        },
+      });
     };
     //折叠面板折叠
     const handleCollapseChange = (value: any) => {

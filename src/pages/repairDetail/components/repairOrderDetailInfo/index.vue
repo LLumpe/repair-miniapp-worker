@@ -35,9 +35,7 @@
               display: flex;
               align-items: center;
             "
-            @click="
-              handleShowUserPhone(orderDetail.familyUser.phone || undefined)
-            "
+            @click="handleShowUserPhone(orderDetail.phone || undefined)"
           >
             <image
               style="width: 40rpx; height: 40rpx"
@@ -45,7 +43,7 @@
               src="@/static/images/repairDetail/phone-call.png"
             />
             <span style="margin-left: 10rpx; font-size: 26rpx; color: #999">{{
-              orderDetail.familyUser.phone || "未绑定手机号码"
+              orderDetail.phone || "未绑定手机号码"
             }}</span>
           </view>
         </view>
@@ -67,6 +65,19 @@
                 <text class="iconfont icon-arrow-right" />
               </view>
             </picker>
+          </view>
+          <view
+            style="
+              border-radius: 15rpx;
+              background-color: #09c46e;
+              font-size: 22rpx;
+              color: #ffffff;
+              padding: 0 14rpx;
+            "
+            v-if="orderDetail.repairEquipmentContent[repairIndex].state !== 0"
+            >{{
+              tapState[orderDetail.repairEquipmentContent[repairIndex].state]
+            }}
           </view>
         </view>
         <view class="box-info-item">
@@ -118,8 +129,9 @@
           <view class="box-info-item-label">维修设备分值</view>
           <view class="box-info-item-value">
             {{
-              orderDetail.repairEquipmentContent[repairIndex].score + "分" ||
-              "N/A"
+              orderDetail.repairEquipmentContent[repairIndex].score
+                ? orderDetail.repairEquipmentContent[repairIndex].score + "分"
+                : "N/A"
             }}
           </view>
         </view>
@@ -167,10 +179,7 @@
       >
         <view class="phone">
           <view class="phone-title">联系用户</view>
-          <view
-            class="phone-number"
-            @click="handleCallUser(orderDetail.familyUser.phone)"
-          >
+          <view class="phone-number" @click="handleCallUser(orderDetail.phone)">
             <view style="display: flex; align-items: center">
               <image
                 style="width: 40rpx; height: 40rpx; margin-right: 20rpx"
@@ -272,6 +281,16 @@ export default defineComponent({
       console.log("equipment", equipment);
       equipmentList.value = equipment;
     };
+    //订单状态
+    const tapState = {
+      "0": "正常状态",
+      "-3": "退单申请中",
+      "-4": "退单申请失败",
+      "-5": "已退单",
+      "-6": "返修申请中",
+      "-7": "返修申请失败",
+      "-8": "已返修",
+    };
     //规划路线
     const handleClickRoutePlan = (value: any) => {
       // let plugin = requirePlugin("routePlan");
@@ -318,6 +337,7 @@ export default defineComponent({
       { immediate: true }
     );
     return {
+      tapState,
       handleClickRoutePlan,
       repairIndex,
       equipmentList,
