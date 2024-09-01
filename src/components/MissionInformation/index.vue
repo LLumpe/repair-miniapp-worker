@@ -77,6 +77,14 @@
             hover-class="none"
           />
           <u-cell-item
+            title="维修方式"
+            :value="
+              data.way === 0 ? '上门维修' : data.way === 1 ? '店内维修' : 'N/A'
+            "
+            :arrow="false"
+            hover-class="none"
+          />
+          <u-cell-item
             title="设备维修分值"
             :value="
               data.repairEquipmentContent[repairIndex].score

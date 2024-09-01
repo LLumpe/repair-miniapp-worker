@@ -77,7 +77,10 @@
                   <view class="info-device-content-item">{{
                     equipmentList[repairIndex]
                   }}</view>
-                  <text class="iconfont icon-arrow-right" />
+                  <text
+                    class="iconfont icon-arrow-right"
+                    style="margin-left: 10rpx"
+                  />
                 </view>
               </picker>
             </view>
@@ -95,6 +98,17 @@
             <view class="box-detail-info-item-value">{{
               orderDetail.repairEquipmentContent[repairIndex].repairDesc ||
               "N/A"
+            }}</view>
+          </view>
+
+          <view class="box-detail-info-item">
+            <view class="box-detail-info-item-title">维修方式</view>
+            <view class="box-detail-info-item-value">{{
+              orderDetail.way === 0
+                ? "上门维修"
+                : orderDetail.way === 1
+                ? "店内维修"
+                : "N/A"
             }}</view>
           </view>
 
@@ -126,8 +140,9 @@
           <view class="box-detail-info-item">
             <view class="box-detail-info-item-title">维修设备分值</view>
             <view class="box-detail-info-item-value">{{
-              orderDetail.repairEquipmentContent[repairIndex].score + "分" ||
-              "N/A"
+              orderDetail.repairEquipmentContent[repairIndex].score
+                ? orderDetail.repairEquipmentContent[repairIndex].score + "分"
+                : "N/A"
             }}</view>
           </view>
 

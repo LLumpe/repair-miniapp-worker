@@ -38,6 +38,17 @@
             </view>
           </view>
           <view class="divider" />
+          <view class="option-sort">
+            <view style="width: 250rpx">
+              <USelect
+                :localdata="wayRange"
+                @change="changeWaySortOption"
+                :value="wayValue"
+                :clear="false"
+              />
+            </view>
+          </view>
+          <view class="divider" />
           <view class="option-sort" @click="changeTimeSortOption">
             发布时间
             <view class="arrow">
@@ -167,6 +178,7 @@ import {
   showLoading,
   showToast,
 } from "@/utils/helper";
+import { USelect } from "@/components/USelect/index.vue";
 import { computed, defineComponent, reactive, Ref, ref } from "vue";
 import authService from "@/service/authService";
 //维修订单详情
@@ -255,7 +267,7 @@ const getRepairOrder = (params: any) => {
   });
 };
 export default defineComponent({
-  components: { Empty, UMap },
+  components: { Empty, UMap, USelect },
   setup(props) {
     //抢单点击事件
     // const takeOrder = (event)=>{
@@ -276,6 +288,13 @@ export default defineComponent({
     //当前选择的排序配置
     const disSortOption = ref(0);
     const timeSortOption = ref(0);
+    //维修方式
+    const wayValue = ref(0);
+    //排序方法
+    const wayRange = reactive([
+      { text: "上门维修", value: 0 },
+      { text: "店内维修", value: 1 },
+    ]);
     //跳转，详细页面
     const handleClickShowmore = (item: any) => {
       navigateTo("/pages/missionInformation/index", { id: item.id });
@@ -295,6 +314,7 @@ export default defineComponent({
         },
       });
     };
+
     //接单
     const handleTakeOrder = async (item: any) => {
       showLoading("接单中...");
@@ -311,11 +331,11 @@ export default defineComponent({
         const res = await requestTakeRepairOrder(new_Data);
         if (res.data.success) {
           hideLoading();
-          showToast("接单成功", "success");
           getRepairOrder({});
+          showToast("接单成功", "success");
         }
-        hideLoading();
       } catch (error) {
+        console.log("error", error);
         hideLoading();
       }
     };
@@ -341,13 +361,27 @@ export default defineComponent({
       getRepairOrder(params);
       console.log(timeSortOption.value);
     };
+    //切换排序顺序，0-不排序，1-升序，2-降序
+    const changeWaySortOption = (e) => {
+      console.log("e", e);
+      wayValue.value = e;
+      const params = {
+        orderColumn: "way",
+        orderWay: sortOptions.get(timeSortOption?.value),
+      };
+      getRepairOrder(params);
+      console.log(timeSortOption.value);
+    };
     return {
+      wayValue,
       handleTake,
       handleTakeOrder,
       handleClickMark,
       changeDisSortOption,
       changeTimeSortOption,
+      changeWaySortOption,
       handleClickShowmore,
+      wayRange,
       disSortOption,
       timeSortOption,
       ...useTop(),
@@ -458,6 +492,7 @@ export default defineComponent({
         justify-content: center;
         align-items: center;
         transition: 0.3s all;
+        font-size: $uni-font-size-base;
         &:active {
           background-color: rgba(85, 85, 85, 0.1);
         }

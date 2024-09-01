@@ -1,63 +1,81 @@
 <template>
-  <view 
+  <view
     class="drop-down-box"
     :style="{
       '--duration': duration + 'ms',
-      '--autoContentTop': autoContentTop}"
+      '--autoContentTop': autoContentTop,
+    }"
   >
-    <view
-      class="drop-down-container"
-      @tap.stop.prevent
-      @touchmove.stop.prevent
-    >
-      <view 
+    <view class="drop-down-container" @tap.stop.prevent @touchmove.stop.prevent>
+      <view
         class="drop-down-header"
         :style="{
           zIndex: zIndex,
-          backgroundColor: bgColor.header}"
+          backgroundColor: bgColor.header,
+        }"
       >
-        <view 
-          v-for="(item,index) in options"
+        <view
+          v-for="(item, index) in options"
           :key="item.header"
           class="drop-down-header-item"
-          :style="{fontSize: fontSize.header + 'rpx'}"
+          :style="{ fontSize: fontSize.header + 'rpx' }"
           @tap.stop="onHeaderTap(index)"
         >
           <text
             class="drop-down-header-item-label"
             :style="{
-              fontWeight: headerActiveIndex === index && dropOver && activeWeight ? 'bold' : 'normal',
-              color: headerActiveIndex === index && dropOver ? activeColor: defaultColor}"
+              fontWeight:
+                headerActiveIndex === index && dropOver && activeWeight
+                  ? 'bold'
+                  : 'normal',
+              color:
+                headerActiveIndex === index && dropOver
+                  ? activeColor
+                  : defaultColor,
+            }"
           >
             {{ item.header }}
           </text>
           <text
             v-if="dropIcon === 'fill'"
             class="iconfont icon-down-fill drop-down-header-item-icon"
-            :class="[headerActiveIndex === index && dropOver ? 'drop-down-header-item-icon-active' : '']"
+            :class="[
+              headerActiveIndex === index && dropOver
+                ? 'drop-down-header-item-icon-active'
+                : '',
+            ]"
             :style="{
               fontSize: fontSize.header - 5 + 'rpx',
-              color: headerActiveIndex === index && dropOver ? activeColor: '#979797'}"
+              color:
+                headerActiveIndex === index && dropOver
+                  ? activeColor
+                  : '#979797',
+            }"
           />
           <text
-            v-if="dropIcon==='line'"
+            v-if="dropIcon === 'line'"
             class="iconfont icon-down drop-down-header-item-icon"
-            :class="[headerActiveIndex === index && dropOver ? 'drop-down-header-item-icon-active' : '']"
+            :class="[
+              headerActiveIndex === index && dropOver
+                ? 'drop-down-header-item-icon-active'
+                : '',
+            ]"
             :style="{
               fontSize: fontSize.header - 5 + 'rpx',
               transformOrigin: '50% 45%',
-              color: headerActiveIndex === index && dropOver ? activeColor: '#979797'}"
+              color:
+                headerActiveIndex === index && dropOver
+                  ? activeColor
+                  : '#979797',
+            }"
           />
-          <view
-            v-if="index !== options.length - 1"
-            class="drop-down-vline"
-          />
+          <view v-if="index !== options.length - 1" class="drop-down-vline" />
         </view>
       </view>
-			
-      <scroll-view 
+
+      <scroll-view
         v-if="dropDown"
-        class="drop-down-content" 
+        class="drop-down-content"
         :class="[dropOver ? 'drop-down-content-active' : '']"
         :scroll-y="scroll"
         :enable-flex="true"
@@ -70,10 +88,11 @@
           borderBottomRightRadius: radius + 'px',
           minHeight: minHeight + 'rpx',
           height: autoHeight ? 'auto' : minHeight + 'rpx',
-          maxHeight: autoHeight && maxHeight ? maxHeight + 'rpx' : 'auto'}"
+          maxHeight: autoHeight && maxHeight ? maxHeight + 'rpx' : 'auto',
+        }"
       >
         <view
-          v-for="(item,index) in options"
+          v-for="(item, index) in options"
           :key="contentBoxKey(index)"
           class="drop-down-content-box"
         >
@@ -83,10 +102,7 @@
           >
             <slot />
           </view>
-          <view
-            v-for="(content, zIndex2) in item['contents']"
-            :key="content"
-          >
+          <view v-for="(content, zIndex2) in item['contents']" :key="content">
             <view
               v-if="!item['custom'] && headerActiveIndex === index && dropDown"
               class="drop-down-content-item"
@@ -94,17 +110,28 @@
             >
               <text
                 class="drop-down-content-item-label"
-                :style="{color: contentActiveIndexList[headerActiveIndex]['index'] === zIndex2 && dropOver ? activeColor: defaultColor}"
+                :style="{
+                  color:
+                    contentActiveIndexList[headerActiveIndex]['index'] ===
+                      zIndex2 && dropOver
+                      ? activeColor
+                      : defaultColor,
+                }"
               >
                 {{ content }}
               </text>
               <text
-                v-if="contentActiveIndexList[headerActiveIndex]['index'] === zIndex2 && dropOver"
-                :style="{color: activeColor}"
+                v-if="
+                  contentActiveIndexList[headerActiveIndex]['index'] ===
+                    zIndex2 && dropOver
+                "
+                :style="{ color: activeColor }"
                 class="iconfont icon-selected drop-down-content-item-icon"
               />
               <view
-                v-if="zIndex2 !== options[headerActiveIndex].contents.length - 1"
+                v-if="
+                  zIndex2 !== options[headerActiveIndex].contents.length - 1
+                "
                 class="drop-down-line"
               />
             </view>
@@ -112,7 +139,7 @@
         </view>
       </scroll-view>
     </view>
-		
+
     <view
       v-if="dropDown"
       class="drop-down-mask"
@@ -120,7 +147,8 @@
       :style="{
         zIndex: zIndex - 2,
         height: screenHeight + 'px',
-        backgroundColor: 'rgba(0, 0, 0, ' + maskAlpha + ')'}"
+        backgroundColor: 'rgba(0, 0, 0, ' + maskAlpha + ')',
+      }"
       @tap.stop="close"
       @touchmove.stop.prevent
     />
@@ -129,6 +157,7 @@
 
 <script>
 export default {
+  name: "DropDown",
   props: {
     options: {
       type: Array,

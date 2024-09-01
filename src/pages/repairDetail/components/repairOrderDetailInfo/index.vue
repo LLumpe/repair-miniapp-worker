@@ -148,6 +148,18 @@
           </view>
         </view>
         <view class="box-info-item">
+          <view class="box-info-item-label">维修方式</view>
+          <view class="box-info-item-value">
+            {{
+              orderDetail.way === 0
+                ? "上门维修"
+                : orderDetail.way === 1
+                ? "店内维修"
+                : "无"
+            }}
+          </view>
+        </view>
+        <view class="box-info-item">
           <view class="box-info-item-label">维修地址</view>
           <view class="box-info-item-value">
             {{
