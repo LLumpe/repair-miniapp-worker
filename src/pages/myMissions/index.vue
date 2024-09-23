@@ -187,8 +187,11 @@ const repairOrderInfo: Ref<repairOrder[] | []> = ref([]);
 const currentLocation = reactive({ latitude: 0, longitude: 0 });
 //地图组件标记维修订单点位
 const repairOrderMarkers: Ref<any[] | []> = ref([]);
-//当前获取的页数
-const current: number = ref(1);
+//当前选择的排序配置
+const disSortOption = ref(0);
+const timeSortOption = ref(0);
+//维修方式
+const wayValue = ref(null);
 //从vuex获取缓存维修订单信息
 const useTaskList = () => {
   const store = useStore();
@@ -285,15 +288,11 @@ export default defineComponent({
       console.log("clickMarkEvent", e);
       navigateTo("/pages/missionInformation/index", { id: e });
     };
-    //当前选择的排序配置
-    const disSortOption = ref(0);
-    const timeSortOption = ref(0);
-    //维修方式
-    const wayValue = ref(0);
     //排序方法
     const wayRange = reactive([
       { text: "上门维修", value: 0 },
       { text: "店内维修", value: 1 },
+      { text: "全部", value: null },
     ]);
     //跳转，详细页面
     const handleClickShowmore = (item: any) => {
@@ -361,13 +360,12 @@ export default defineComponent({
       getRepairOrder(params);
       console.log(timeSortOption.value);
     };
-    //切换排序顺序，0-不排序，1-升序，2-降序
+    //切换排序顺序，0-上门维修，1-店内维修
     const changeWaySortOption = (e) => {
       console.log("e", e);
       wayValue.value = e;
       const params = {
-        orderColumn: "way",
-        orderWay: sortOptions.get(timeSortOption?.value),
+        way: wayValue.value,
       };
       getRepairOrder(params);
       console.log(timeSortOption.value);
@@ -406,7 +404,12 @@ export default defineComponent({
     const store = useStore();
     const logged = store.getters.logged;
     if (logged) {
-      getRepairOrder(null);
+      const params = {
+        way: wayValue.value,
+      };
+      console.log("params", params);
+
+      getRepairOrder(params);
       getLocation();
     } else {
       showToast("您还未登录，请先登录");

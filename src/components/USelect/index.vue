@@ -9,11 +9,12 @@
           <view v-if="current" class="uni-select__input-text">{{
             textShow
           }}</view>
-          <view
+          <view v-else class="uni-select__input-text">{{ "全部" }}</view>
+          <!-- <view
             v-else
             class="uni-select__input-text uni-select__input-placeholder"
             >{{ typePlaceholder }}</view
-          >
+          > -->
           <view v-if="current && clear && !disabled" @click.stop="clearVal">
             <uni-icons type="clear" color="#c0c4cc" size="24" />
           </view>
@@ -98,7 +99,7 @@ export default {
     },
     value: {
       type: [String, Number],
-      default: "",
+      default: "维修方式",
     },
     modelValue: {
       type: [String, Number],
